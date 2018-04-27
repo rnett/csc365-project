@@ -11,9 +11,11 @@ Ryan Nett and Andrew Pirondini
 
 ## Datebase
 Planets:
+
 **star letter** orbital_radius orbital_period ortibal_eccentricity orbital_inclination mass radius density goldilocks(T/F)
 
 Stars:
+
 **name** type(blue giant, etc) color? mass #planets distance
 
 ## Frontend mockup
