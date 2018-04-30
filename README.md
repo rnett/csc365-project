@@ -1,9 +1,9 @@
 # CSC 365 Project
 
 ## Members
-Ryan Nett
-Andrew Pirondini
-Wilson Leong
+* Ryan Nett
+* Andrew Pirondini
+* Wilson Leong
 
 ## Parts
 * Parser: parse csv into database.  Share classes w/ java backend?
