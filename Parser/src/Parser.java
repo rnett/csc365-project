@@ -174,7 +174,7 @@ public class Parser {
             planets = planets.substring(0, planets.length() - 2) + ";";
             stars = stars.substring(0, stars.length() - 2) + ";";
 
-            FileWriter fw = new FileWriter("./parsed.sql");
+            FileWriter fw = new FileWriter("./ParsedData.sql");
             fw.write(stars);
             fw.write("\n\n");
             fw.write(planets);
