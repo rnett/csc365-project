@@ -1,40 +1,40 @@
 # This file was produced by the NASA Exoplanet Archive  http://exoplanetarchive.ipac.caltech.edu
 # Thu Apr 26 17:02:49 2018
-#
-# COLUMN pl_hostname:    Host Name
-# COLUMN pl_letter:      Planet Letter
-# COLUMN pl_discmethod:  Discovery Method
-# COLUMN pl_pnum:        Number of Planets in System
-# COLUMN pl_orbper:      Orbital Period [days]
-# COLUMN pl_orbsmax:     Orbit Semi-Major Axis [AU])
-# COLUMN pl_orbeccen:    Eccentricity
-# COLUMN pl_orbincl:     Inclination [deg]
-# COLUMN pl_bmassj:      Planet Mass or M*sin(i)[Jupiter mass]
-# COLUMN pl_bmassprov:   Planet Mass or M*sin(i) Provenance
-# COLUMN pl_radj:        Planet Radius [Jupiter radii]
-# COLUMN pl_dens:        Planet Density [g/cm**3]
-# COLUMN pl_ttvflag:     TTV Flag
-# COLUMN pl_kepflag:     Kepler Field Flag
-# COLUMN pl_k2flag:      K2 Mission Flag
-# COLUMN pl_nnotes:      Number of Notes
-# COLUMN ra_str:         RA [sexagesimal]
-# COLUMN ra:             RA [decimal degrees]
-# COLUMN dec_str:        Dec [sexagesimal]
-# COLUMN dec:            Dec [decimal degrees]
-# COLUMN st_dist:        Distance [pc]
-# COLUMN st_optmag:      Optical Magnitude [mag]
-# COLUMN st_optband:     Optical Magnitude Band
-# COLUMN gaia_gmag:      G-band (Gaia) [mag]
-# COLUMN st_teff:        Effective Temperature [K]
-# COLUMN st_mass:        Stellar Mass [Solar mass]
-# COLUMN st_rad:         Stellar Radius [Solar radii]
-# COLUMN rowupdate:      Date of Last Update
-# COLUMN pl_name:        Planet Name
-# COLUMN pl_massj:       Planet Mass [Jupiter mass]
-# COLUMN hd_name:        HD Name
-# COLUMN hip_name:       HIP Name
-# COLUMN st_sp:          Spectral Type
-# COLUMN st_spstr:       Spectral Type
+#0 id
+#1  COLUMN pl_hostname:    Host Name
+#2  COLUMN pl_letter:      Planet Letter
+#3  COLUMN pl_discmethod:  Discovery Method
+#4  COLUMN pl_pnum:        Number of Planets in System
+#5  COLUMN pl_orbper:      Orbital Period [days]
+#6  COLUMN pl_orbsmax:     Orbit Semi-Major Axis [AU])
+#7  COLUMN pl_orbeccen:    Eccentricity
+#8  COLUMN pl_orbincl:     Inclination [deg]
+#9  COLUMN pl_bmassj:      Planet Mass or M*sin(i)[Jupiter mass]
+#10 COLUMN pl_bmassprov:   Planet Mass or M*sin(i) Provenance
+#11 COLUMN pl_radj:        Planet Radius [Jupiter radii]
+#12 COLUMN pl_dens:        Planet Density [g/cm**3]
+#13 COLUMN pl_ttvflag:     TTV Flag
+#14 COLUMN pl_kepflag:     Kepler Field Flag
+#15 COLUMN pl_k2flag:      K2 Mission Flag
+#16 COLUMN pl_nnotes:      Number of Notes
+#17 COLUMN ra_str:         RA [sexagesimal]
+#18 COLUMN ra:             RA [decimal degrees]
+#19 COLUMN dec_str:        Dec [sexagesimal]
+#20 COLUMN dec:            Dec [decimal degrees]
+#21 COLUMN st_dist:        Distance [pc]
+#22 COLUMN st_optmag:      Optical Magnitude [mag]
+#23 COLUMN st_optband:     Optical Magnitude Band
+#24 COLUMN gaia_gmag:      G-band (Gaia) [mag]
+#25 COLUMN st_teff:        Effective Temperature [K]
+#26 COLUMN st_mass:        Stellar Mass [Solar mass]
+#27 COLUMN st_rad:         Stellar Radius [Solar radii]
+#28 COLUMN rowupdate:      Date of Last Update
+#29 COLUMN pl_name:        Planet Name
+#30 COLUMN pl_massj:       Planet Mass [Jupiter mass]
+#31 COLUMN hd_name:        HD Name
+#32 COLUMN hip_name:       HIP Name
+#33 COLUMN st_sp:          Spectral Type
+#34 COLUMN st_spstr:       Spectral Type
 #
 loc_rowid,pl_hostname,pl_letter,pl_discmethod,pl_pnum,pl_orbper,pl_orbsmax,pl_orbeccen,pl_orbincl,pl_bmassj,pl_bmassprov,pl_radj,pl_dens,pl_ttvflag,pl_kepflag,pl_k2flag,pl_nnotes,ra_str,ra,dec_str,dec,st_dist,st_optmag,st_optband,gaia_gmag,st_teff,st_mass,st_rad,rowupdate,pl_name,pl_massj,hd_name,hip_name,st_sp,st_spstr
 1,11 Com,b,Radial Velocity,1,326.03000000,1.290000,0.231000,,19.40000,Msini,,,0,0,0,0,12h20m43.03s,185.179276,+17d47m34.3s,17.792868,110.62,4.740,V (Johnson),,4742.00,2.70,19.00,2014-05-14,11 Com b,,HD 107383,HIP 60202,5.00,K0 III
