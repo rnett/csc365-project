@@ -1,14 +1,16 @@
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Parser {
 
     public static final String dataFile = "./planets.csv";
 
+
+    /* uses star mass and temp to calculate goldilocks zone, then magnitude
+       assuming magnitude will have more error (interstelar dust, etc) than mass and temp
+    */
     public static void main(String[] args){
 
         HashSet<String> seenStars = new HashSet<String>();
@@ -46,6 +48,7 @@ public class Parser {
                 double starRadius = d(data[27]); // solar radii
                 String hipName = data[32];
                 String starClass = data[34];
+                double magnitude = d(data[22]);
 
                 if(starClass.contains("({"))
                     starClass = starClass.substring(data[34].indexOf("({"));
@@ -78,14 +81,80 @@ public class Parser {
                 else if (starClass.contains("V"))
                     type = "main sequence";
 
-                //TODO calculate using magnitude http://www.planetarybiology.com/calculating_habitable_zone.html
-                double goldInner = -1;
-                double goldOuter = -1;
+
+                double goldInner1 = -1;
+                double goldOuter1 = -1;
                 if(starTemp != -1 && starRadius != -1){
                     double lumosity = 4 * Math.PI * Math.pow(starRadius * 695700000, 2) * 5.67 * Math.pow(10, -8) * Math.pow(starTemp, 4);
                     lumosity /= 3.828 * Math.pow(10, 26);
-                    goldInner = Math.sqrt(lumosity / 1.1);
-                    goldOuter = Math.sqrt(lumosity / 0.53);
+                    goldInner1 = Math.sqrt(lumosity / 1.1);
+                    goldOuter1 = Math.sqrt(lumosity / 0.53);
+
+                }
+
+                double goldInner2 = -1;
+                double goldOuter2 = -1;
+                if (magnitude != -1 && starDist != -1 && !color.contentEquals("unknown")) {
+
+                    double BC = -0.4;
+                    switch (color) {
+                        case "blue":
+                            BC = -4.3;
+                            break;
+                        case "blue white":
+                            BC = -2.0;
+                            break;
+                        case "white":
+                            BC = -0.3;
+                            break;
+                        case "yellow white":
+                            BC = -0.15;
+                            break;
+                        case "yellow":
+                            BC = -0.4;
+                            break;
+                        case "light orange":
+                            BC = -0.8;
+                            break;
+                        case "orange red":
+                            BC = -2.0;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    double absMag = magnitude - 5 * Math.log10(starDist / 10);
+                    double bolMag = absMag + BC;
+                    double lumosity = Math.pow(10, (bolMag - 4.72) / -2.5);
+                    goldInner2 = Math.sqrt(lumosity / 1.1);
+                    goldOuter2 = Math.sqrt(lumosity / 0.53);
+
+                }
+
+                double goldInner = goldInner1;
+                double goldOuter = goldOuter1;
+                /*
+                if(goldInner1 != -1 && goldInner2 != -1){
+
+                    goldInner = (goldInner1 + goldInner2) / 2D;
+                    goldOuter = (goldOuter1 + goldOuter2) / 2D;
+
+                    System.out.println(String.format("Both are good\nDiffs: %5f\n%5f : %5f",
+                            100*(2 * (goldInner1 - goldInner2)/(goldInner1 + goldInner2)),
+                            goldInner1, goldInner2));
+
+
+                } else if(goldInner1 != -1 && goldInner2 == -1){
+                    goldInner = goldInner1;
+                    goldOuter = goldOuter1;
+                } else if(goldInner1 == -1 && goldInner2 != -1){
+                    goldInner = goldInner2;
+                    goldOuter = goldOuter2;
+                }
+                */
+                if (goldInner == -1) {
+                    goldInner = goldInner2;
+                    goldOuter = goldOuter2;
                 }
 
                 if(!seenStars.contains(starName)){
