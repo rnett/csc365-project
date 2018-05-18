@@ -50,8 +50,19 @@ public class Parser {
                 String starClass = data[34];
                 double magnitude = d(data[22]);
 
+                //TODO convert mass & radius to earth instead of jupiter
+
+                if (eccentricity == -1)
+                    eccentricity = 0;
+
+                if (inclination == -1)
+                    inclination = 0;
+
                 if(starClass.contains("({"))
                     starClass = starClass.substring(data[34].indexOf("({"));
+
+                //TODO redo types and colors to work with java enums (use ordinal)
+                //TODO give star and planet columns distinct names
 
                 String color = "unknown";
                 if(starClass.contains("O"))
@@ -174,13 +185,15 @@ public class Parser {
             planets = planets.substring(0, planets.length() - 2) + ";";
             stars = stars.substring(0, stars.length() - 2) + ";";
 
-            FileWriter fw = new FileWriter("./ParsedData.sql");
+            FileWriter fw = new FileWriter("./ParsedData.sql");//TODO need to run data import
             fw.write(stars);
             fw.write("\n\n");
             fw.write(planets);
             fw.close();
 
             read.close();
+
+            //TODO add `number of glodilocks planets` by query.  leave out goldilocks t/f and find in query?
 
         } catch( Exception e ){
             e.printStackTrace();
