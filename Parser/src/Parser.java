@@ -11,8 +11,11 @@ public class Parser {
     /* uses star mass and temp to calculate goldilocks zone, then magnitude
        assuming magnitude will have more error (interstelar dust, etc) than mass and temp
     */
-    public static void main(String[] args){
+    public static void main(String[] args) {
+        parse();
+    }
 
+    public static void parse() {
         HashSet<String> seenStars = new HashSet<String>();
 
         String planets = "INSERT INTO planets (starName, letter, orbitalRadius, orbitalPeriod, orbitalEccentricity, " +
