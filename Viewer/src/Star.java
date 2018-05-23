@@ -26,15 +26,15 @@ public class Star {
         starName = rs.getString("starName");
         hipName = rs.getString("hipName");
         starClass = rs.getString("class");
-        //TODO type
-        //TODO color
-        mass = rs.getDouble("mass");
-        radius = rs.getDouble("radius");
+        type = Type.fromDB(rs.getString("type"));
+        color = Color.fromDB(rs.getString("color"));
+        mass = rs.getDouble("starMass");
+        radius = rs.getDouble("starRadius");
         temp = rs.getDouble("temp");
         goldilocksInner = rs.getDouble("goldilocksInner");
         goldilocksOuter = rs.getDouble("goldilocksOuter");
         planets = rs.getInt("planets");
-        distance = rs.getDouble("distance"); //TODO use ly?
+        distance = rs.getDouble("distance") * 3.26D; // converted to ly
     }
 
     public String getStarName() {
@@ -93,7 +93,8 @@ public class Star {
         YellowWhite("Yellow White"),
         Yellow("Yellow"),
         LightOrange("Light Orange"),
-        OrangeRed("Orange Red");
+        OrangeRed("Orange Red"),
+        BadFormat("Bad Format in DB");
 
         private String name;
 
@@ -104,6 +105,29 @@ public class Star {
         public String getName() {
             return name;
         }
+
+        public static Color fromDB(String data) {
+            switch (data) {
+                case "unknown":
+                    return Unknown;
+                case "blue":
+                    return Blue;
+                case "blue white":
+                    return BlueWhite;
+                case "white":
+                    return White;
+                case "yellow white":
+                    return YellowWhite;
+                case "yellow":
+                    return Yellow;
+                case "light orange":
+                    return LightOrange;
+                case "orange red":
+                    return OrangeRed;
+                default:
+                    return BadFormat;
+            }
+        }
     }
 
     public enum Type {
@@ -112,7 +136,8 @@ public class Star {
         BrightGiant("Bright Giant"),
         Giant("Giant"),
         Subgiant("Subgiant"),
-        MainSequence("Main Sequence");
+        MainSequence("Main Sequence"),
+        BadFormat("Bad Format in DB");
 
         private String name;
 
@@ -122,6 +147,25 @@ public class Star {
 
         public String getName() {
             return name;
+        }
+
+        public static Type fromDB(String data) {
+            switch (data) {
+                case "unknown":
+                    return Unknown;
+                case "supergiant":
+                    return Supergiant;
+                case "bright giant":
+                    return BrightGiant;
+                case "giant":
+                    return Giant;
+                case "subgiant":
+                    return Subgiant;
+                case "main sequence":
+                    return MainSequence;
+                default:
+                    return BadFormat;
+            }
         }
     }
 

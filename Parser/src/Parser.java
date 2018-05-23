@@ -16,9 +16,9 @@ public class Parser {
         HashSet<String> seenStars = new HashSet<String>();
 
         String planets = "INSERT INTO planets (starName, letter, orbitalRadius, orbitalPeriod, orbitalEccentricity, " +
-                "orbitalInclination, mass, radius, density, goldilocks) VALUES";
+                "orbitalInclination, planetMass, planetRadius, density, goldilocks) VALUES";
 
-        String stars = "INSERT INTO stars (starName, hipName, class, type, color, mass, radius, temp, goldilocksInner, goldilocksOuter, planets, distance) VALUES";
+        String stars = "INSERT INTO stars (starName, hipName, class, type, color, starMass, starRadius, temp, goldilocksInner, goldilocksOuter, planets, distance) VALUES";
 
         try {
             BufferedReader read = new BufferedReader(new FileReader(dataFile));
@@ -60,9 +60,6 @@ public class Parser {
 
                 if(starClass.contains("({"))
                     starClass = starClass.substring(data[34].indexOf("({"));
-
-                //TODO redo types and colors to work with java enums (use ordinal)
-                //TODO give star and planet columns distinct names
 
                 String color = "unknown";
                 if(starClass.contains("O"))

@@ -1,4 +1,5 @@
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Planet {
 
@@ -19,8 +20,17 @@ public class Planet {
      *
      * @param rs
      */
-    public Planet(ResultSet rs) {
-        //TODO
+    public Planet(ResultSet rs) throws SQLException {
+        starName = rs.getString("starName");
+        letter = rs.getString("letter");
+        orbitRadius = rs.getDouble("orbitRadius");
+        orbitPeriod = rs.getDouble("orbitPeriod");
+        orbitEccentricity = rs.getDouble("orbitalEccentricity");
+        orbitInclination = rs.getDouble("orbitalInclination");
+        mass = rs.getDouble("planetMass");
+        radius = rs.getDouble("planetRadius");
+        density = rs.getDouble("density");
+        goldilocks = rs.getBoolean("goldilocks");
     }
 
     public String getStarName() {
