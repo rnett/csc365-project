@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
--- Host: ambari-head.csc.calpoly.edu    Database: rnett
+-- Host: ambari-head.csc.calpoly.edu    Database: stargazers
 -- ------------------------------------------------------
 -- Server version	5.7.22-0ubuntu0.16.04.1
 
@@ -83,7 +83,7 @@ INSERT INTO `stars` VALUES ('11 Com','HIP 60202','K0 III','supergiant','light or
 UNLOCK TABLES;
 
 --
--- Dumping routines for database 'rnett'
+-- Dumping routines for database 'stargazers'
 --
 /*!50003 DROP PROCEDURE IF EXISTS `drop_all` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -95,13 +95,13 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`rnett`@`%` PROCEDURE `drop_all`()
+CREATE DEFINER=`stargazers`@`%` PROCEDURE `drop_all`()
 BEGIN
     DECLARE done BOOLEAN DEFAULT FALSE; 
     DECLARE truncatestmnt TEXT; -- this is where the truncate statement will be retrieved from cursor
 
     -- This is the magic query that will bring all the table names from the database
-    DECLARE c1 CURSOR FOR SELECT Concat('Drop TABLE ', TABLE_NAME) FROM INFORMATION_SCHEMA.TABLES WHERE INFORMATION_SCHEMA.TABLES.TABLE_SCHEMA = "rnett" AND Table_Type = 'BASE TABLE';
+    DECLARE c1 CURSOR FOR SELECT Concat('Drop TABLE ', TABLE_NAME) FROM INFORMATION_SCHEMA.TABLES WHERE INFORMATION_SCHEMA.TABLES.TABLE_SCHEMA = "stargazers" AND Table_Type = 'BASE TABLE';
     DECLARE CONTINUE HANDLER FOR SQLSTATE '02000' SET done = TRUE; 
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -133,7 +133,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`rnett`@`%` PROCEDURE `show_counts`()
+CREATE DEFINER=`stargazers`@`%` PROCEDURE `show_counts`()
 BEGIN
 SELECT 
     TABLE_NAME, 
@@ -141,7 +141,7 @@ SELECT
 FROM 
     `information_schema`.`tables` 
 WHERE 
-    `table_schema` = 'rnett';
+    `table_schema` = 'stargazers';
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -158,13 +158,13 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`rnett`@`%` PROCEDURE `truncate_all`()
+CREATE DEFINER=`stargazers`@`%` PROCEDURE `truncate_all`()
 BEGIN
     DECLARE done BOOLEAN DEFAULT FALSE; 
     DECLARE truncatestmnt TEXT; -- this is where the truncate statement will be retrieved from cursor
 
     -- This is the magic query that will bring all the table names from the database
-    DECLARE c1 CURSOR FOR SELECT Concat('TRUNCATE TABLE ', TABLE_NAME) FROM INFORMATION_SCHEMA.TABLES WHERE INFORMATION_SCHEMA.TABLES.TABLE_SCHEMA = "rnett" AND Table_Type = 'BASE TABLE';
+    DECLARE c1 CURSOR FOR SELECT Concat('TRUNCATE TABLE ', TABLE_NAME) FROM INFORMATION_SCHEMA.TABLES WHERE INFORMATION_SCHEMA.TABLES.TABLE_SCHEMA = "stargazers" AND Table_Type = 'BASE TABLE';
     DECLARE CONTINUE HANDLER FOR SQLSTATE '02000' SET done = TRUE; 
 
 SET FOREIGN_KEY_CHECKS=0;
