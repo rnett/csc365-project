@@ -1,3 +1,6 @@
+import javafx.scene.shape.Ellipse;
+import javafx.scene.transform.Rotate;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -43,6 +46,26 @@ public class Planet {
 
     public double getOrbitRadius() {
         return orbitRadius;
+    }
+
+    public double getMinorOrbitRadius() {
+        return orbitRadius * Math.sqrt(1 - Math.pow(orbitEccentricity, 2));
+    }
+
+    public double getLinearEcentricity() {
+        return Math.sqrt(Math.pow(orbitRadius, 2) - Math.pow(getMinorOrbitRadius(), 2));
+    }
+
+    public Ellipse getOrbitElipse(double starX, double starY, double angle) {
+        Ellipse e = new Ellipse(starX + getLinearEcentricity(), starX, getOrbitRadius(), getMinorOrbitRadius());
+        Rotate r = new Rotate();
+        r.setPivotX(starX);
+        r.setPivotY(starY);
+        r.setAngle(angle);
+
+        e.getTransforms().add(r);
+
+        return e;
     }
 
     public double getOrbitPeriod() {
