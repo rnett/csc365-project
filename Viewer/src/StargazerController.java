@@ -1,15 +1,17 @@
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.collections.ObservableList;
-import javafx.collections.FXCollections;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 public class StargazerController implements Initializable {
    @FXML private ListView<String> planetList;
@@ -35,23 +37,21 @@ public class StargazerController implements Initializable {
    @FXML private TextField orbitPeriod;
    @FXML private TextField orbitEccentricity;
    @FXML private TextField orbitInclination;
-   
-   private StarModel star;
-   private PlanetModel planet;
+
+    private SolarSystem solarSystem;
+    private Star star;
+    private Planet planet;
 
    @Override
    public void initialize(URL location, ResourceBundle resources) {
-      ObservableList<StarModel> stars = FXCollections.observableArrayList(getStars());
+       ObservableList<SolarSystem> stars = FXCollections.observableArrayList(getSolarSystems());
 
       ArrayList<String> starNames = new ArrayList<String>();
 
-      for (StarModel sm : stars) {
-         starNames.add(sm.name);
+       for (SolarSystem sm : stars) {
+           starNames.add(sm.getStar().getStarName());
          // TODO: Remove the lines below this since this list should
-         // be populated when the star is created
-         sm.planets.add(new PlanetModel("A"));
-         sm.planets.add(new PlanetModel("B"));
-         sm.planets.add(new PlanetModel("C"));
+           // be populated when the solarSystem is created
       }
 
       starList.setItems(FXCollections.observableArrayList(starNames));
@@ -60,21 +60,22 @@ public class StargazerController implements Initializable {
          @Override
          public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
             starName.setText(newValue);
-            for (StarModel sm : stars) {
-               if (sm.name.equals(newValue)) {
-                  star = sm;
+             for (SolarSystem sm : stars) {
+                 if (sm.getStar().getStarName().equals(newValue)) {
+                     solarSystem = sm;
+                     star = solarSystem.getStar();
                   break;
                }
             }
 
-            starType.setText(star.type);
-            starColor.setText(star.color);
-            starMass.setText(doubleString(star.mass));
-            starRadius.setText(doubleString(star.radius));
-            starTemp.setText(doubleString(star.temp));
-            starDistance.setText(doubleString(star.distance));
-            starGoldilocksInner.setText(doubleString(star.goldilocksInner));
-            starGoldilocksOuter.setText(doubleString(star.goldilocksInner));
+             starType.setText(star.getType().getName());
+             starColor.setText(star.getColor().getName());
+             starMass.setText(doubleString(star.getMass()));
+             starRadius.setText(doubleString(star.getRadius()));
+             starTemp.setText(doubleString(star.getTemp()) + " K");
+             starDistance.setText(doubleString(star.getDistance()) + " LY");
+             starGoldilocksInner.setText(doubleString(star.getGoldilocksInner()) + " AU");
+             starGoldilocksOuter.setText(doubleString(star.getGoldilocksOuter()) + " AU");
 
             planetList.setItems(FXCollections.observableArrayList(getPlanets()));
             planetList.getSelectionModel().select(0);
@@ -88,23 +89,23 @@ public class StargazerController implements Initializable {
             if (newValue == null) {
                return;
             }
-            planetName.setText(star.name + " " + newValue);
+             planetName.setText(star.getStarName() + " " + newValue);
 
-            for (PlanetModel pm : star.planets) {
-               if (pm.name.equals(newValue)) {
+             for (Planet pm : solarSystem.getPlanets()) {
+                 if (pm.getLetter().equals(newValue)) { //TODO make sure this works
                   planet = pm;
                   break;
                }
             }
-            planetMass.setText(doubleString(planet.mass));
-            planetRadius.setText(doubleString(planet.radius));
-            planetDensity.setText(doubleString(planet.density));
-            planetGoldilocks.setSelected(planet.goldilocks);
+             planetMass.setText(doubleString(planet.getMass()));
+             planetRadius.setText(doubleString(planet.getRadius()));
+             planetDensity.setText(doubleString(planet.getDensity()));
+             planetGoldilocks.setSelected(planet.isGoldilocks());
 
-            orbitRadius.setText(doubleString(planet.orbitalRadius));
-            orbitPeriod.setText(doubleString(planet.orbitalPeriod));
-            orbitEccentricity.setText(doubleString(planet.orbitalEccentricity));
-            orbitInclination.setText(doubleString(planet.orbitalInclination));
+             orbitRadius.setText(doubleString(planet.getOrbitRadius()));
+             orbitPeriod.setText(doubleString(planet.getOrbitPeriod()));
+             orbitEccentricity.setText(doubleString(planet.getOrbitEccentricity()));
+             orbitInclination.setText(doubleString(planet.getOrbitInclination()));
          }
       });
       planetList.setItems(FXCollections.observableArrayList(getPlanets()));
@@ -112,22 +113,14 @@ public class StargazerController implements Initializable {
    }
 
    // TODO: Must be overriden to construct the stars from the database
-   private ArrayList<StarModel> getStars() {
-      ArrayList<StarModel> stars = new ArrayList<StarModel>();
-      stars.add(new StarModel("11 Com"));
-      stars.add(new StarModel("11 UMi"));
-      stars.add(new StarModel("14 And"));
-      stars.add(new StarModel("14 Her"));
+   private ArrayList<SolarSystem> getSolarSystems() {
+       ArrayList<SolarSystem> stars = new ArrayList<SolarSystem>();
 
       return stars;
    }
 
    private ArrayList<String> getPlanets() {
       ArrayList<String> planetNames = new ArrayList<String>();
- 
-      for (PlanetModel pm : star.planets) {
-         planetNames.add(pm.name);
-      }
 
       return planetNames;
    }

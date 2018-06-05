@@ -1,5 +1,5 @@
-import javafx.scene.Parent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 
 public class SimpleView implements View {
     private String fxml;
