@@ -2,16 +2,15 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: linear-gradient(#000000, #212426);" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StargazerController">
    <children>
@@ -19,31 +18,17 @@
          <children>
             <AnchorPane prefHeight="798.0" prefWidth="250.0">
                <children>
-                  <Label alignment="CENTER" layoutX="71.0" layoutY="14.0" prefHeight="23.0" prefWidth="174.0" style="-fx-text-fill: white;" text="Stars" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                  <Label alignment="CENTER" layoutX="10.0" layoutY="75.0" prefHeight="23.0" prefWidth="174.0" style="-fx-text-fill: white;" text="Stars" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <ListView fx:id="starList" layoutY="81.0" prefHeight="709.0" prefWidth="230.0" style="-fx-background-color: #b2bebf; -fx-border-radius: 5;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="81.0" />
-                  <HBox layoutX="25.0" layoutY="37.0" prefHeight="34.0" prefWidth="200.0">
-                     <children>
-                          <ToggleButton prefWidth="76.0">
-                           <graphic>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="All" />
-                           </graphic>
-                          </ToggleButton>
-                          <ToggleButton prefWidth="76.0" selected="true">
-                           <graphic>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Goldilocks" />
-                           </graphic>
-                          </ToggleButton>
-                          <ToggleButton prefWidth="76.0">
-                           <graphic>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Close" />
-                           </graphic>
-                          </ToggleButton>
-                     </children>
-                  </HBox>
+                  <ListView fx:id="starList" layoutY="113.0" prefHeight="677.0" prefWidth="230.0" style="-fx-background-color: #b2bebf; -fx-border-radius: 5;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="113.0" />
+                  <Button layoutX="10.0" layoutY="21.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="230.0" style="-fx-border-radius: 4; -fx-background-color: #3d87ec; -fx-text-fill: white;" text="Import External Data" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
                </children></AnchorPane>
             <AnchorPane prefWidth="450.0" style="-fx-border-color: white; -fx-border-width: 0 1 0 1;">
                <children>
@@ -210,13 +195,10 @@
                                                 <Insets bottom="10.0" />
                                              </VBox.margin>
                                           </Label>
-                                          <CheckBox fx:id="planetGoldilocks" alignment="CENTER" disable="true" mnemonicParsing="false" prefHeight="18.0" prefWidth="16.0">
+                                          <CheckBox fx:id="planetGoldilocks" alignment="CENTER" blendMode="ADD" disable="true" mnemonicParsing="false" prefHeight="16.0" prefWidth="19.0" textFill="WHITE">
                                              <VBox.margin>
                                                 <Insets left="20.0" />
                                              </VBox.margin>
-                                             <padding>
-                                                <Insets bottom="1.0" right="-4.0" />
-                                             </padding>
                                           </CheckBox>
                                        </children>
                                     </VBox>

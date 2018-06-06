@@ -4,10 +4,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.shape.Circle;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -37,6 +40,9 @@ public class StargazerController implements Initializable {
    @FXML private TextField orbitPeriod;
    @FXML private TextField orbitEccentricity;
    @FXML private TextField orbitInclination;
+
+    @FXML
+    private Canvas canvas;
 
     private SolarSystem solarSystem;
     private Star star;
@@ -79,6 +85,15 @@ public class StargazerController implements Initializable {
 
             planetList.setItems(FXCollections.observableArrayList(getPlanets()));
             planetList.getSelectionModel().select(0);
+
+             //TODO drawing, DON'T NEED CANVAS, CAN DRAW ONTO HBOX ETC
+             GraphicsContext gc = canvas.getGraphicsContext2D();
+             Circle starC = new Circle(canvas.getWidth() / 2D, canvas.getHeight() / 2D, 10);
+
+             for (Planet p : solarSystem.getPlanets()) {
+                 p.getOrbitElipse(canvas.getWidth() / 2D, canvas.getWidth() / 2D, 0);
+             }
+
          }
       });
       starList.getSelectionModel().select(0);
