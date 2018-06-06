@@ -1,3 +1,5 @@
+//package exoplanetsolarsystemviewer; //comment out later when whole program gets integrated
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ public class SolarSystem {
 
     private ArrayList<Planet> planets;
 
-    //TODO test this
+    //TODO verify rs.previous() works as intended.
 
     /**
      * Extracts the star and planets info from a join of planets and stars
@@ -19,27 +21,40 @@ public class SolarSystem {
      * @param rs
      */
     public SolarSystem(ResultSet rs) throws SQLException {
-        star = new Star(rs);
+        
+        boolean isFirstIteration = true;
+        boolean moreRows = false;
+        
+        while ( (moreRows = rs.next()) ) {
+           
+            if( isFirstIteration ) {
+                
+                star = new Star(rs);
 
-        planets = new ArrayList<Planet>();
-
-        planets.add(new Planet(rs));
-
-        boolean ended = false;
-
-        while (true) {
-            ended = !rs.next();
-
-            if (ended || !rs.getString("starName").contentEquals(star.getStarName())) {
-                // no next or star changed.  if star changed ended will be false
+                planets = new ArrayList<Planet>();
+                
+                // no next or star changed.  if star changed moreRows will be true, must revert back one row
+                if (!moreRows || !rs.getString("starName").contentEquals(star.getStarName())) {
+                
+                    break;
+                }
+                
+                planets.add(new Planet(rs));
+                
+                isFirstIteration = false;
+            }
+            
+            if (!moreRows || !rs.getString("starName").contentEquals(star.getStarName())) {
+                
                 break;
             }
+            
 
             planets.add(new Planet(rs));
 
         }
 
-        if (!ended)
+        if (moreRows)
             rs.previous();
 
     }

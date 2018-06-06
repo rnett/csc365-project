@@ -1,3 +1,5 @@
+//package exoplanetsolarsystemviewer; //comment out later when whole program gets integrated
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

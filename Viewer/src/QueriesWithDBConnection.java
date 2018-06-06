@@ -1,3 +1,5 @@
+//package exoplanetsolarsystemviewer; //comment out later when whole program gets integrated
+
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
@@ -21,30 +23,30 @@ public class QueriesWithDBConnection {
     user for sql statements like:
     select * from stargazers.stars where ___
     */
-    public static ResultSet getStarsFilterBySingleAttr(String attribute, String compareOp, Object value) {
+    public static SolarSystem getStarsFilterBySingleAttr(String attribute, String compareOp, Object value) throws Exception {
         
         ResultSet rs = null;
         
         try {
             Statement statement = connect.createStatement();
             
-            String sqlStatement = "select * from stargazers.stars";
+            String sqlStatement = "select * from stargazers.stars natural join stargazers.planets";
             
             if(attribute == null || compareOp == null) {
-                return rs;
+                return new SolarSystem(rs);
             }
             
             
             if(compareOp != "<=" && compareOp != "=" && compareOp != ">=") {
                 System.out.println("Unsupported operator.");
-                return rs;
+                return new SolarSystem(rs);
             }
             
             if(value instanceof String || value instanceof Double || value instanceof Integer) {
                 sqlStatement += " where " + attribute + " " + compareOp + " " + value;
             } else {
                 System.out.println("Invalid value");
-                return rs;
+                return new SolarSystem(rs);
             }
            
             rs = statement.executeQuery(sqlStatement); //ResultSet is an iterator
@@ -54,7 +56,7 @@ public class QueriesWithDBConnection {
             System.out.println(e.getMessage());
         }
         
-        return rs;
+        return new SolarSystem(rs);
     }
     
     /*
@@ -63,20 +65,21 @@ public class QueriesWithDBConnection {
     
     supported logical operators: and, or
     */
-    public static ResultSet getStarsFilterByMultipleAttr(ArrayList<String> attributes,
-                                                         ArrayList<String> compareOps, ArrayList values, ArrayList<String> chainOps) {
+    public static SolarSystem getStarsFilterByMultipleAttr(ArrayList<String> attributes,
+                                                         ArrayList<String> compareOps, 
+                                                         ArrayList values, ArrayList<String> chainOps) throws Exception {
         
         ResultSet rs = null;
         
         try {
             Statement statement = connect.createStatement();
             
-            String sqlStatement = "select * from stargazers.stars";
+            String sqlStatement = "select * from stargazers.stars natural join stargazers.planets";
             
             if(attributes.isEmpty() || compareOps.isEmpty() || 
                     (   ( attributes.size() != compareOps.size() ) && ( compareOps.size() != values.size() )  )  || 
                     chainOps.size() != attributes.size() - 1) {
-                return rs; 
+                return new SolarSystem(rs); 
             }
             
             if(attributes.size() > 0) {
@@ -88,7 +91,7 @@ public class QueriesWithDBConnection {
                 if( compareOps.get(i) != "<=" && compareOps.get(i) != "=" &&  compareOps.get(i) != ">=" ) {
                     System.out.println("Unsupported operator.");
                     rs = null;
-                    return rs;
+                    return new SolarSystem(rs);
                 }
                 
                 if( (values.get(i) instanceof String || values.get(i) instanceof Double || values.get(i) instanceof Integer) ) {
@@ -102,7 +105,7 @@ public class QueriesWithDBConnection {
                 } else {
                     System.out.println("Invalid value");
                     rs = null;
-                    return rs;
+                    return new SolarSystem(rs);
                 }
                 
                 
@@ -128,7 +131,7 @@ public class QueriesWithDBConnection {
             System.out.println(e.getMessage());
         }
         
-        return rs;
+        return new SolarSystem(rs);
     }
 
     private static void doSshTunnel(String strSshUser, String strSshPassword, String strSshHost, int nSshPort,
@@ -207,6 +210,14 @@ public class QueriesWithDBConnection {
             System.out.println(e.getMessage());
             return;
         }
+        
+        //--------------------------------
+        // This space is for putting your own driver code for development purposes.
+        
+        
+        
+        
+        //--------------------------------
         
         
         

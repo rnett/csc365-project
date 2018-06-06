@@ -1,3 +1,5 @@
+//package exoplanetsolarsystemviewer; //comment out later when whole program gets integrated
+
 import javafx.scene.shape.Ellipse;
 import javafx.scene.transform.Rotate;
 
@@ -26,8 +28,8 @@ public class Planet {
     public Planet(ResultSet rs) throws SQLException {
         starName = rs.getString("starName");
         letter = rs.getString("letter");
-        orbitRadius = rs.getDouble("orbitRadius");
-        orbitPeriod = rs.getDouble("orbitPeriod");
+        orbitRadius = rs.getDouble("orbitalRadius");
+        orbitPeriod = rs.getDouble("orbitalPeriod");
         orbitEccentricity = rs.getDouble("orbitalEccentricity");
         orbitInclination = rs.getDouble("orbitalInclination");
         mass = rs.getDouble("planetMass");
