@@ -10,13 +10,13 @@ public class Star {
     private String starClass;
     private Type type;
     private Color color;
-    private double mass;
-    private double radius;
-    private double temp;
+    private double mass; // solar masses
+    private double radius; // solar radius
+    private double temp; // kelvin
     private double goldilocksInner;
     private double goldilocksOuter;
     private int planets;
-    private double distance;
+    private double distance; // light years
 
     /**
      * Reads a Star from the ResultSet.  Must have all Star fields.
@@ -88,20 +88,26 @@ public class Star {
     }
 
     public enum Color {
-        Unknown("Unknown"),
-        Blue("Blue"),
-        BlueWhite("Blue White"),
-        White("White"),
-        YellowWhite("Yellow White"),
-        Yellow("Yellow"),
-        LightOrange("Light Orange"),
-        OrangeRed("Orange Red"),
-        BadFormat("Bad Format in DB");
+        Unknown("Unknown", javafx.scene.paint.Color.GRAY),
+        Blue("Blue", javafx.scene.paint.Color.BLUE),
+        BlueWhite("Blue White", javafx.scene.paint.Color.LIGHTBLUE),
+        White("White", javafx.scene.paint.Color.WHITE),
+        YellowWhite("Yellow White", javafx.scene.paint.Color.LIGHTYELLOW),
+        Yellow("Yellow", javafx.scene.paint.Color.YELLOW),
+        LightOrange("Light Orange", javafx.scene.paint.Color.ORANGE),
+        OrangeRed("Orange Red", javafx.scene.paint.Color.ORANGERED),
+        BadFormat("Bad Format in DB", javafx.scene.paint.Color.GRAY);
 
         private String name;
+        private javafx.scene.paint.Color color;
 
-        Color(String str) {
+        Color(String str, javafx.scene.paint.Color displayColor) {
             name = str;
+            color = displayColor;
+        }
+
+        public javafx.scene.paint.Color getDisplayColor() {
+            return color;
         }
 
         public String getName() {

@@ -10,13 +10,13 @@ public class Planet {
 
     private String starName;
     private String letter;
-    private double orbitRadius;
-    private double orbitPeriod;
+    private double orbitRadius; //TODO AU
+    private double orbitPeriod; // days
     private double orbitEccentricity;
     private double orbitInclination;
-    private double mass;
-    private double radius;
-    private double density;
+    private double mass; //TODO earth masses
+    private double radius; //TODO earth radii
+    private double density; // g/cm3
     private boolean goldilocks;
 
     /**
