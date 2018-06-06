@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -37,6 +38,9 @@ public class StargazerController implements Initializable {
    @FXML private TextField orbitPeriod;
    @FXML private TextField orbitEccentricity;
    @FXML private TextField orbitInclination;
+
+    @FXML
+    private Canvas canvas;
 
     private SolarSystem solarSystem;
     private Star star;
@@ -79,6 +83,10 @@ public class StargazerController implements Initializable {
 
             planetList.setItems(FXCollections.observableArrayList(getPlanets()));
             planetList.getSelectionModel().select(0);
+
+             //TODO drawing
+
+
          }
       });
       starList.getSelectionModel().select(0);

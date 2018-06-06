@@ -246,7 +246,8 @@
                <children>
                   <AnchorPane layoutX="50.0" layoutY="209.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0">
                      <children>
-                        <Canvas height="480.0" width="480.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                         <Canvas fx:id="canvas" height="480.0" width="480.0" AnchorPane.bottomAnchor="0.0"
+                                 AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
                      </children>
                   </AnchorPane>
                   <Label alignment="CENTER" layoutX="50.0" layoutY="127.0" text="Solar System Viewer" AnchorPane.bottomAnchor="610.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0">
