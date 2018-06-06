@@ -13,8 +13,29 @@ import java.util.Properties;
 
 public class QueriesWithDBConnection {
 
-    static Connection connect;
-    
+    private static Connection connect;
+
+    public static Connection connect() {
+        if (connect == null) {
+
+            connect = newConnect(false, null, null, null);
+        }
+
+        return connect;
+    }
+
+    public static Connection connect(String[] args) {
+        if (connect == null) {
+
+            connect = newConnect(true, args[0], args[1], args[2]);
+
+            //deployment version
+            //connect = newConnect(false, null, null, null);
+        }
+
+        return connect;
+    }
+
     /*query from stars table and filter by condition for an attribute
     for values, you must pass in the appropriate type depending on the column
     
@@ -24,41 +45,41 @@ public class QueriesWithDBConnection {
     select * from stargazers.stars where ___
     */
     public static SolarSystem getStarsFilterBySingleAttr(String attribute, String compareOp, Object value) throws Exception {
-        
+
         ResultSet rs = null;
-        
+
         try {
-            Statement statement = connect.createStatement();
-            
+            Statement statement = connect().createStatement();
+
             String sqlStatement = "select * from stargazers.stars natural join stargazers.planets";
-            
+
             if(attribute == null || compareOp == null) {
                 return new SolarSystem(rs);
             }
-            
-            
+
+
             if(compareOp != "<=" && compareOp != "=" && compareOp != ">=") {
                 System.out.println("Unsupported operator.");
                 return new SolarSystem(rs);
             }
-            
+
             if(value instanceof String || value instanceof Double || value instanceof Integer) {
                 sqlStatement += " where " + attribute + " " + compareOp + " " + value;
             } else {
                 System.out.println("Invalid value");
                 return new SolarSystem(rs);
             }
-           
+
             rs = statement.executeQuery(sqlStatement); //ResultSet is an iterator
-            
-            
+
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        
+
         return new SolarSystem(rs);
     }
-    
+
     /*
     
     underlying goal: Act as a filter for goldilocks or queries involving multiple attributes.
@@ -66,71 +87,70 @@ public class QueriesWithDBConnection {
     supported logical operators: and, or
     */
     public static SolarSystem getStarsFilterByMultipleAttr(ArrayList<String> attributes,
-                                                         ArrayList<String> compareOps, 
-                                                         ArrayList values, ArrayList<String> chainOps) throws Exception {
-        
+                                                           ArrayList<String> compareOps,
+                                                           ArrayList values, ArrayList<String> chainOps) throws Exception {
+
         ResultSet rs = null;
-        
+
         try {
-            Statement statement = connect.createStatement();
-            
+            Statement statement = connect().createStatement();
+
             String sqlStatement = "select * from stargazers.stars natural join stargazers.planets";
-            
-            if(attributes.isEmpty() || compareOps.isEmpty() || 
-                    (   ( attributes.size() != compareOps.size() ) && ( compareOps.size() != values.size() )  )  || 
+
+            if (attributes.isEmpty() || compareOps.isEmpty() ||
+                    ((attributes.size() != compareOps.size()) && (compareOps.size() != values.size())) ||
                     chainOps.size() != attributes.size() - 1) {
-                return new SolarSystem(rs); 
+                return new SolarSystem(rs);
             }
-            
+
             if(attributes.size() > 0) {
                 sqlStatement += " where ";
             }
-            
+
             for(int i = 0; i < attributes.size(); i++) {
-                
+
                 if( compareOps.get(i) != "<=" && compareOps.get(i) != "=" &&  compareOps.get(i) != ">=" ) {
                     System.out.println("Unsupported operator.");
                     rs = null;
                     return new SolarSystem(rs);
                 }
-                
+
                 if( (values.get(i) instanceof String || values.get(i) instanceof Double || values.get(i) instanceof Integer) ) {
-                    
+
                     if(!chainOps.isEmpty()) {
                         sqlStatement += attributes.get(i) + " " + compareOps.get(i) + " " + values.get(i) + " " + chainOps.remove(0) + " ";
                     } else {
                         sqlStatement += attributes.get(i) + " " + compareOps.get(i) + " " + values.get(i);
                     }
-                    
+
                 } else {
                     System.out.println("Invalid value");
                     rs = null;
                     return new SolarSystem(rs);
                 }
-                
-                
+
+
             }
-            
-            
+
+
             rs = statement.executeQuery(sqlStatement); //ResultSet is an iterator
-            
+
             System.out.println("Query being executed: " + sqlStatement);
-            
+
             //testing... delete later
             while(rs.next()) {
                 String starName = rs.getString("starName");
                 double goldilocksInner = rs.getDouble("goldilocksInner");
                 double goldilocksOuter = rs.getDouble("goldilocksOuter");
                 System.out.println("starName: " + starName + " " + "goldilocksInner: " + goldilocksInner + " goldilocksOuter: " + goldilocksOuter);
-                
+
             }
-            
-            
-            
+
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        
+
         return new SolarSystem(rs);
     }
 
@@ -149,16 +169,12 @@ public class QueriesWithDBConnection {
         session.setPortForwardingL(nLocalPort, strRemoteHost, nRemotePort);
     }
 
-    public static void main(String[] args) {
+    private static Connection newConnect(boolean ssh, String sshHost, String sshUser, String sshPW) {
 
-        boolean ssh = true;
+        Connection c = null;
 
         try {
             if (ssh) {
-
-                String strSshUser = args[1]; // SSH loging username
-                String strSshPassword = args[2]; // SSH login password
-                String strSshHost = args[0]; // hostname or ip or
                 // SSH server
                 int nSshPort = 22; // remote SSH host port number
                 String strRemoteHost = "ambari-head.csc.calpoly.edu"; // hostname or
@@ -171,27 +187,42 @@ public class QueriesWithDBConnection {
                 String strDbUser = "stargazers"; // database loging username
                 String strDbPassword = "stars_3"; // database login password
 
-                doSshTunnel(strSshUser, strSshPassword, strSshHost, nSshPort, strRemoteHost, nLocalPort,
+                doSshTunnel(sshUser, sshPW, sshHost, nSshPort, strRemoteHost, nLocalPort,
                         nRemotePort);
 
                 //Class.forName("com.mysql.jdbc.Driver"); //input driver class name
 
                 //input database url, user and password
-                connect = DriverManager.getConnection("jdbc:mysql://localhost:" + nLocalPort +
+                c = DriverManager.getConnection("jdbc:mysql://localhost:" + nLocalPort +
                                 "?useSSL=false&zeroDateTimeBehavior=CONVERT_TO_NULL&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
                         strDbUser,
                         strDbPassword);
             } else {
-                connect = DriverManager.getConnection("jdbc:mysql://ambari-head.csc.calpoly.edu:3306" +
+                c = DriverManager.getConnection("jdbc:mysql://ambari-head.csc.calpoly.edu:3306" +
                                 "?useSSL=false&zeroDateTimeBehavior=CONVERT_TO_NULL&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
                         "stargazers", "stars_3");
             }
+
+            return c;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        boolean ssh = true;
+
+        connect(args);
+
+        try {
             String attribute = "starMass";
             String compOp = "=";
             double value = 1.08;
-            
+
             QueriesWithDBConnection.getStarsFilterBySingleAttr(attribute, compOp, value);
-            
+
             ArrayList<String> attributes = new ArrayList<String>();
             attributes.add("goldilocksInner");
             attributes.add("goldilocksOuter");
@@ -203,24 +234,21 @@ public class QueriesWithDBConnection {
             values.add(20.00);
             ArrayList<String> logicalOps = new ArrayList<String>();
             logicalOps.add("and");
-            
+
             QueriesWithDBConnection.getStarsFilterByMultipleAttr(attributes, compOps, values, logicalOps);
-            
+
         } catch(Exception e) {
             System.out.println(e.getMessage());
             return;
         }
-        
+
         //--------------------------------
         // This space is for putting your own driver code for development purposes.
-        
-        
-        
-        
+
+
         //--------------------------------
-        
-        
-        
+
+
     }
-    
+
 }
