@@ -88,22 +88,24 @@ public class Star {
     }
 
     public enum Color {
-        Unknown("Unknown", javafx.scene.paint.Color.GRAY),
-        Blue("Blue", javafx.scene.paint.Color.BLUE),
-        BlueWhite("Blue White", javafx.scene.paint.Color.LIGHTBLUE),
-        White("White", javafx.scene.paint.Color.WHITE),
-        YellowWhite("Yellow White", javafx.scene.paint.Color.LIGHTYELLOW),
-        Yellow("Yellow", javafx.scene.paint.Color.YELLOW),
-        LightOrange("Light Orange", javafx.scene.paint.Color.ORANGE),
-        OrangeRed("Orange Red", javafx.scene.paint.Color.ORANGERED),
-        BadFormat("Bad Format in DB", javafx.scene.paint.Color.GRAY);
+        Unknown("Unknown", javafx.scene.paint.Color.GRAY, "unknown"),
+        Blue("Blue", javafx.scene.paint.Color.BLUE, "blue"),
+        BlueWhite("Blue White", javafx.scene.paint.Color.LIGHTBLUE, "blue white"),
+        White("White", javafx.scene.paint.Color.WHITE, "white"),
+        YellowWhite("Yellow White", javafx.scene.paint.Color.LIGHTYELLOW, "yellow white"),
+        Yellow("Yellow", javafx.scene.paint.Color.YELLOW, "yellow"),
+        LightOrange("Light Orange", javafx.scene.paint.Color.ORANGE, "light orange"),
+        OrangeRed("Orange Red", javafx.scene.paint.Color.ORANGERED, "orange red"),
+        BadFormat("Bad Format in DB", javafx.scene.paint.Color.GRAY, "");
 
         private String name;
         private javafx.scene.paint.Color color;
+        private String db;
 
-        Color(String str, javafx.scene.paint.Color displayColor) {
+        Color(String str, javafx.scene.paint.Color displayColor, String db) {
             name = str;
             color = displayColor;
+            this.db = db;
         }
 
         public javafx.scene.paint.Color getDisplayColor() {
@@ -115,42 +117,33 @@ public class Star {
         }
 
         public static Color fromDB(String data) {
-            switch (data) {
-                case "unknown":
-                    return Unknown;
-                case "blue":
-                    return Blue;
-                case "blue white":
-                    return BlueWhite;
-                case "white":
-                    return White;
-                case "yellow white":
-                    return YellowWhite;
-                case "yellow":
-                    return Yellow;
-                case "light orange":
-                    return LightOrange;
-                case "orange red":
-                    return OrangeRed;
-                default:
-                    return BadFormat;
+            for (Color c : Color.values()) {
+                if (c.db == data)
+                    return c;
             }
+            return BadFormat;
+        }
+
+        public String toDB() {
+            return db;
         }
     }
 
     public enum Type {
-        Unknown("Unknown"),
-        Supergiant("Supergiant"),
-        BrightGiant("Bright Giant"),
-        Giant("Giant"),
-        Subgiant("Subgiant"),
-        MainSequence("Main Sequence"),
-        BadFormat("Bad Format in DB");
+        Unknown("Unknown", "unknown"),
+        Supergiant("Supergiant", "supergiant"),
+        BrightGiant("Bright Giant", "bright giant"),
+        Giant("Giant", "giant"),
+        Subgiant("Subgiant", "subgiant"),
+        MainSequence("Main Sequence", "main sequence"),
+        BadFormat("Bad Format in DB", "");
 
         private String name;
+        private String db;
 
-        Type(String str) {
+        Type(String str, String db) {
             name = str;
+            this.db = db;
         }
 
         public String getName() {
@@ -158,22 +151,15 @@ public class Star {
         }
 
         public static Type fromDB(String data) {
-            switch (data) {
-                case "unknown":
-                    return Unknown;
-                case "supergiant":
-                    return Supergiant;
-                case "bright giant":
-                    return BrightGiant;
-                case "giant":
-                    return Giant;
-                case "subgiant":
-                    return Subgiant;
-                case "main sequence":
-                    return MainSequence;
-                default:
-                    return BadFormat;
+            for (Type t : Type.values()) {
+                if (t.db.equals(data))
+                    return t;
             }
+            return BadFormat;
+        }
+
+        public String toDB() {
+            return db;
         }
     }
 

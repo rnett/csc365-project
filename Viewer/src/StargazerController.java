@@ -129,13 +129,19 @@ public class StargazerController implements Initializable {
 
    // TODO: Must be overriden to construct the stars from the database
    private ArrayList<SolarSystem> getSolarSystems() {
-       ArrayList<SolarSystem> stars = new ArrayList<SolarSystem>();
-
-      return stars;
+       try {
+           return QueriesWithDBConnection.getSystems(Star.Type.BadFormat, -1, -1, -1, -1, -1, -1);
+       } catch (Exception e) {
+           //TODO error handeling
+           return new ArrayList<SolarSystem>();
+       }
    }
 
    private ArrayList<String> getPlanets() {
       ArrayList<String> planetNames = new ArrayList<String>();
+
+       for (Planet p : solarSystem.getPlanets())
+           planetNames.add(p.getLetter());
 
       return planetNames;
    }

@@ -80,6 +80,10 @@ public class QueriesWithDBConnection {
         return new SolarSystem(rs);
     }
 
+    public static ArrayList<SolarSystem> getSystems(Star.Type type, int planetsMin, int planetsMax, int goldilocksMin, int goldilocksMax, int distanceMin, int distanceMax) {
+        return new ArrayList<SolarSystem>();
+    }
+
     /*
     
     underlying goal: Act as a filter for goldilocks or queries involving multiple attributes.
