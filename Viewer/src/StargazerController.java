@@ -2,16 +2,17 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -42,7 +43,13 @@ public class StargazerController implements Initializable {
    @FXML private TextField orbitInclination;
 
     @FXML
-    private Canvas canvas;
+    private Button importButton;
+
+    @FXML
+    private AnchorPane starViewer;
+
+    private FileChooser fileChooser = null;
+    private Stage stage;
 
     private SolarSystem solarSystem;
     private Star star;
@@ -50,6 +57,21 @@ public class StargazerController implements Initializable {
 
    @Override
    public void initialize(URL location, ResourceBundle resources) {
+
+       fileChooser = new FileChooser();
+
+
+       importButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+           @Override
+           public void handle(MouseEvent event) {
+               fileChooser.setInitialDirectory(new File("."));
+               fileChooser.setTitle("Select Data File");
+               File f = fileChooser.showOpenDialog(stage);
+               Parser.parse(f.getAbsolutePath());
+
+           }
+       });
+
        ObservableList<SolarSystem> stars = FXCollections.observableArrayList(getSolarSystems());
 
       ArrayList<String> starNames = new ArrayList<String>();
@@ -86,12 +108,15 @@ public class StargazerController implements Initializable {
             planetList.setItems(FXCollections.observableArrayList(getPlanets()));
             planetList.getSelectionModel().select(0);
 
+
              //TODO drawing, DON'T NEED CANVAS, CAN DRAW ONTO HBOX ETC
-             GraphicsContext gc = canvas.getGraphicsContext2D();
-             Circle starC = new Circle(canvas.getWidth() / 2D, canvas.getHeight() / 2D, 10);
+
+             Circle starC = new Circle(starViewer.getWidth() / 2D, starViewer.getHeight() / 2D, 10);
+
+             starViewer.getChildren().add(starC);
 
              for (Planet p : solarSystem.getPlanets()) {
-                 p.getOrbitElipse(canvas.getWidth() / 2D, canvas.getWidth() / 2D, 0);
+                 starViewer.getChildren().add(p.getOrbitElipse(starViewer.getWidth() / 2D, starViewer.getWidth() / 2D, 0));
              }
 
          }
@@ -127,6 +152,10 @@ public class StargazerController implements Initializable {
       planetList.getSelectionModel().select(0);
    }
 
+    public void setStage(Stage s) {
+        stage = s;
+    }
+
    // TODO: Must be overriden to construct the stars from the database
    private ArrayList<SolarSystem> getSolarSystems() {
        try {
@@ -139,6 +168,9 @@ public class StargazerController implements Initializable {
 
    private ArrayList<String> getPlanets() {
       ArrayList<String> planetNames = new ArrayList<String>();
+
+       if (solarSystem == null)
+           return planetNames;
 
        for (Planet p : solarSystem.getPlanets())
            planetNames.add(p.getLetter());

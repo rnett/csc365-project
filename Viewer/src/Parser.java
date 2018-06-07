@@ -7,18 +7,18 @@ import java.util.HashSet;
 
 public class Parser {
 
-    public static final String dataFile = "./planets.csv";
-
 
     /* uses star mass and temp to calculate goldilocks zone, then magnitude
        assuming magnitude will have more error (interstelar dust, etc) than mass and temp
     */
     public static void main(String[] args) {
         QueriesWithDBConnection.connect(args);
-        parse();
+        parse(args[3]);
+
+        QueriesWithDBConnection.close();
     }
 
-    public static void parse() {
+    public static void parse(String dataFile) {
         HashSet<String> seenStars = new HashSet<String>();
 
         String planets = "INSERT INTO planets (starName, letter, orbitalRadius, orbitalPeriod, orbitalEccentricity, " +
@@ -217,8 +217,6 @@ public class Parser {
         } catch( Exception e ){
             e.printStackTrace();
         }
-
-        QueriesWithDBConnection.close();
     }
 
     public static double d(String s){
