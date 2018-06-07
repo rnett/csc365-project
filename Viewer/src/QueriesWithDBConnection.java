@@ -15,14 +15,7 @@ public class QueriesWithDBConnection {
 
     private static Connection connect;
 
-    public static Connection connect() {
-        if (connect == null) {
-
-            connect = newConnect(false, null, null, null);
-        }
-
-        return connect;
-    }
+    private static Session sshSession = null;
 
     public static Connection connect(String[] args) {
         if (connect == null) {
@@ -31,6 +24,19 @@ public class QueriesWithDBConnection {
 
             //deployment version
             //connect = newConnect(false, null, null, null);
+        }
+
+        return connect;
+    }
+
+    public static Connection connect() {
+        try {
+            if (connect == null || connect.isClosed()) {
+
+                connect = newConnect(false, null, null, null);
+            }
+        } catch (Exception e) {
+            connect = newConnect(false, null, null, null);
         }
 
         return connect;
@@ -158,6 +164,15 @@ public class QueriesWithDBConnection {
         return new SolarSystem(rs);
     }
 
+    public static void close() {
+        try {
+            connect.close();
+        } catch (Exception e) {
+
+        }
+        sshSession.disconnect();
+    }
+
     private static void doSshTunnel(String strSshUser, String strSshPassword, String strSshHost, int nSshPort,
                                     String strRemoteHost, int nLocalPort, int nRemotePort) throws JSchException {
         final JSch jsch = new JSch();
@@ -171,6 +186,7 @@ public class QueriesWithDBConnection {
 
         session.connect();
         session.setPortForwardingL(nLocalPort, strRemoteHost, nRemotePort);
+        sshSession = session;
     }
 
     private static Connection newConnect(boolean ssh, String sshHost, String sshUser, String sshPW) {
@@ -198,12 +214,12 @@ public class QueriesWithDBConnection {
 
                 //input database url, user and password
                 c = DriverManager.getConnection("jdbc:mysql://localhost:" + nLocalPort +
-                                "?useSSL=false&zeroDateTimeBehavior=CONVERT_TO_NULL&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                                "/stargazers?useSSL=false&zeroDateTimeBehavior=CONVERT_TO_NULL&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
                         strDbUser,
                         strDbPassword);
             } else {
                 c = DriverManager.getConnection("jdbc:mysql://ambari-head.csc.calpoly.edu:3306" +
-                                "?useSSL=false&zeroDateTimeBehavior=CONVERT_TO_NULL&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                                "/stargazers?useSSL=false&zeroDateTimeBehavior=CONVERT_TO_NULL&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
                         "stargazers", "stars_3");
             }
 

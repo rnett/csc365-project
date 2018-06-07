@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.HashSet;
 
 public class Parser {
@@ -12,6 +14,7 @@ public class Parser {
        assuming magnitude will have more error (interstelar dust, etc) than mass and temp
     */
     public static void main(String[] args) {
+        QueriesWithDBConnection.connect(args);
         parse();
     }
 
@@ -195,11 +198,27 @@ public class Parser {
 
             //TODO add `number of glodilocks planets` by query.  leave out goldilocks t/f and find in query?
 
+            Connection c = QueriesWithDBConnection.connect();
+
+            c.setAutoCommit(false);
+
+            Statement s1 = c.createStatement();
+            s1.executeLargeUpdate(stars);
+            s1.close();
+
+            Statement s2 = c.createStatement();
+            s2.executeLargeUpdate(planets);
+            s2.close();
+
+            c.commit();
+
+            c.setAutoCommit(true);
+
         } catch( Exception e ){
             e.printStackTrace();
         }
 
-
+        QueriesWithDBConnection.close();
     }
 
     public static double d(String s){
