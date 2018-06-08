@@ -90,6 +90,8 @@ public class QueriesWithDBConnection {
     }
 
     public static ArrayList<SolarSystem> getSystems(Star.Type type, int planetsMin, int planetsMax, int goldilocksMin, int goldilocksMax, int distanceMin, int distanceMax) {
+
+
         return new ArrayList<SolarSystem>();
     }
 

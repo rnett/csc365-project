@@ -1,5 +1,6 @@
 //package exoplanetsolarsystemviewer; //comment out later when whole program gets integrated
 
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.transform.Rotate;
 
@@ -58,8 +59,12 @@ public class Planet {
         return Math.sqrt(Math.pow(orbitRadius, 2) - Math.pow(getMinorOrbitRadius(), 2));
     }
 
-    public Ellipse getOrbitElipse(double starX, double starY, double angle) {
+    public Ellipse getOrbitElipse(int index, double starX, double starY, double angle) {
         Ellipse e = new Ellipse(starX + getLinearEcentricity(), starX, getOrbitRadius(), getMinorOrbitRadius());
+
+        e.setStroke(getColor(index));
+        e.setFill(Color.TRANSPARENT);
+
         Rotate r = new Rotate();
         r.setPivotX(starX);
         r.setPivotY(starY);
@@ -68,6 +73,36 @@ public class Planet {
         e.getTransforms().add(r);
 
         return e;
+    }
+
+    public Color getColor(int index) {
+
+        if (this.goldilocks)
+            return Color.LIGHTGREEN;
+
+        switch (index) {
+            case 0:
+                return Color.WHITE;
+            case 1:
+                return Color.RED;
+            case 2:
+                return Color.ORANGE;
+            case 3:
+                return Color.YELLOW;
+            case 4:
+                return Color.DARKGREEN;
+            case 5:
+                return Color.CYAN;
+            case 6:
+                return Color.BLUE;
+            case 7:
+                return Color.PURPLE;
+            case 8:
+                return Color.GREY;
+
+            default:
+                return Color.BLACK;
+        }
     }
 
     public double getOrbitPeriod() {
