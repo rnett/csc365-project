@@ -165,6 +165,8 @@ public class StargazerController implements Initializable {
 
                 //TODO test drawing
 
+                starViewer.getChildren().clear();
+
                 Circle starC = new Circle(starViewer.getWidth() / 2D, starViewer.getHeight() / 2D, 10);
                 starC.setFill(star.getColor().getDisplayColor());
 
@@ -175,8 +177,12 @@ public class StargazerController implements Initializable {
                 ArrayList<Planet> planets = solarSystem.getPlanets();
 
                 for (int i = 0; i < planets.size(); i++) {
-                    starViewer.getChildren().add(planets.get(i).getOrbitElipse(i, starViewer.getWidth() / 2D, starViewer.getWidth() / 2D, r.nextInt(360)));
+                    starViewer.getChildren().add(planets.get(i)
+                            .getOrbitElipse(i, starViewer.getWidth() / 2D, starViewer.getWidth() / 2D, r.nextInt(360)));
                 }
+
+                //TODO refresh starViewer?
+                starViewer.requestLayout();
 
             }
         });
@@ -218,7 +224,11 @@ public class StargazerController implements Initializable {
 
     private ArrayList<SolarSystem> getSolarSystems() {
         try {
-            ArrayList<SolarSystem> ss = QueriesWithDBConnection.getSystems(Star.Type.BadFormat, -1, -1, -1, -1, -1, -1);
+            ArrayList<SolarSystem> ss = QueriesWithDBConnection.getSystems(
+                    Star.Type.BadFormat,
+                    -1, -1,
+                    -1, -1,
+                    -1, -1);
             starsErrorMessage.setText("");
             return ss;
         } catch (Exception e) {
