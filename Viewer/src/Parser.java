@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -193,14 +192,15 @@ public class Parser {
             planets = planets.substring(0, planets.length() - 2) + ";";
             stars = stars.substring(0, stars.length() - 2) + ";";
 
+            /*
             FileWriter fw = new FileWriter("./ParsedData.sql");//TODO need to run data import
             fw.write(stars);
             fw.write("\n\n");
             fw.write(planets);
             fw.close();
+            */
 
             read.close();
-
             //TODO add `number of glodilocks planets` by query.  leave out goldilocks t/f and find in query?
             Connection c = QueriesWithDBConnection.connect();
 

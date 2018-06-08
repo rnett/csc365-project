@@ -14,20 +14,26 @@
          <children>
             <AnchorPane prefHeight="798.0" prefWidth="250.0">
                <children>
-                  <Label alignment="CENTER" layoutX="10.0" layoutY="75.0" prefHeight="23.0" prefWidth="174.0" style="-fx-text-fill: white;" text="Stars" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                   <Label alignment="CENTER" layoutX="10.0" layoutY="69.0" prefHeight="23.0" prefWidth="174.0"
+                          style="-fx-text-fill: white;" text="Stars" AnchorPane.leftAnchor="10.0"
+                          AnchorPane.rightAnchor="10.0">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
                   <ListView fx:id="starList" layoutY="113.0" prefHeight="677.0" prefWidth="230.0" style="-fx-background-color: #b2bebf; -fx-border-radius: 5;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="113.0" />
-                  <Button fx:id="importButton" layoutX="10.0" layoutY="21.0" mnemonicParsing="false" prefHeight="32.0"
-                          prefWidth="230.0"
-                          style="-fx-border-radius: 4; -fx-background-color: #3d87ec; -fx-text-fill: white;"
-                          text="Import External Data" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                   <Button fx:id="importButton" layoutX="10.0" layoutY="14.0" mnemonicParsing="false" prefHeight="32.0"
+                           prefWidth="230.0"
+                           style="-fx-border-radius: 4; -fx-background-color: #3d87ec; -fx-text-fill: white;"
+                           text="Import External Data" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
+                   <Text fx:id="importErrorMessage" layoutX="62.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                         text="Text" textAlignment="CENTER" wrappingWidth="126.13671875"/>
+                   <Text fx:id="starsErrorMessage" layoutX="100.0" layoutY="106.0" strokeType="OUTSIDE"
+                         strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="50.13671875"/>
                </children></AnchorPane>
             <AnchorPane prefWidth="450.0" style="-fx-border-color: white; -fx-border-width: 0 1 0 1;">
                <children>
@@ -275,9 +281,9 @@
             </AnchorPane>
             <AnchorPane maxHeight="800.0" prefHeight="800.0" prefWidth="580.0">
                <children>
-                  <AnchorPane fx:id="starViewer" layoutX="50.0" layoutY="209.0" prefHeight="480.0" prefWidth="480.0"
-                              style="-fx-border-color: white; -fx-border-radius: 4;" AnchorPane.bottomAnchor="100.0"
-                              AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0"/>
+                   <AnchorPane fx:id="starViewer" layoutX="50.0" layoutY="209.0" prefHeight="480.0" prefWidth="480.0"
+                               style="-fx-border-color: white; -fx-border-radius: 4;" AnchorPane.bottomAnchor="100.0"
+                               AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0"/>
                   <Label alignment="CENTER" layoutX="50.0" layoutY="127.0" style="-fx-text-fill: white;" text="Solar System Viewer" AnchorPane.bottomAnchor="610.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0">
                      <font>
                         <Font size="20.0" />
