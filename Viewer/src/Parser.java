@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashSet;
 
@@ -12,13 +13,17 @@ public class Parser {
        assuming magnitude will have more error (interstelar dust, etc) than mass and temp
     */
     public static void main(String[] args) {
-        QueriesWithDBConnection.connect(args);
-        parse(args[3]);
+        QueriesWithDBConnection.connect(args[0], args[1], args[2]);
+        try {
+            parse(args[3]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         QueriesWithDBConnection.close();
     }
 
-    public static void parse(String dataFile) {
+    public static void parse(String dataFile) throws Exception {
         HashSet<String> seenStars = new HashSet<String>();
 
         String planets = "INSERT INTO planets (starName, letter, orbitalRadius, orbitalPeriod, orbitalEccentricity, " +
@@ -26,7 +31,7 @@ public class Parser {
 
         String stars = "INSERT INTO stars (starName, hipName, class, type, color, starMass, starRadius, temp, goldilocksInner, goldilocksOuter, planets, distance) VALUES";
 
-        try {
+
             BufferedReader read = new BufferedReader(new FileReader(dataFile));
             String line;
             while((line = read.readLine()) != null){
@@ -197,8 +202,9 @@ public class Parser {
             read.close();
 
             //TODO add `number of glodilocks planets` by query.  leave out goldilocks t/f and find in query?
-
             Connection c = QueriesWithDBConnection.connect();
+
+        try {
 
             c.setAutoCommit(false);
 
@@ -213,10 +219,11 @@ public class Parser {
             c.commit();
 
             c.setAutoCommit(true);
-
-        } catch( Exception e ){
-            e.printStackTrace();
+        } catch (SQLException se) {
+            c.close();
+            throw se;
         }
+
     }
 
     public static double d(String s){

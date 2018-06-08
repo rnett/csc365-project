@@ -17,26 +17,29 @@ public class QueriesWithDBConnection {
 
     private static Session sshSession = null;
 
-    public static Connection connect(String[] args) {
-        if (connect == null) {
+    private static boolean useArgs = false;
+    private static String sshHost;
+    private static String sshUser;
+    private static String sshPW;
 
-            connect = newConnect(true, args[0], args[1], args[2]);
+    public static Connection connect(String host, String user, String pw) {
 
-            //deployment version
-            //connect = newConnect(false, null, null, null);
-        }
+        sshHost = host;
+        sshUser = user;
+        sshPW = pw;
+        useArgs = true;
 
-        return connect;
+        return connect();
     }
 
     public static Connection connect() {
         try {
             if (connect == null || connect.isClosed()) {
 
-                connect = newConnect(false, null, null, null);
+                connect = newConnect();
             }
         } catch (Exception e) {
-            connect = newConnect(false, null, null, null);
+            connect = newConnect();
         }
 
         return connect;
@@ -189,12 +192,12 @@ public class QueriesWithDBConnection {
         sshSession = session;
     }
 
-    private static Connection newConnect(boolean ssh, String sshHost, String sshUser, String sshPW) {
+    private static Connection newConnect() {
 
         Connection c = null;
 
         try {
-            if (ssh) {
+            if (useArgs) {
                 // SSH server
                 int nSshPort = 22; // remote SSH host port number
                 String strRemoteHost = "ambari-head.csc.calpoly.edu"; // hostname or
@@ -207,7 +210,8 @@ public class QueriesWithDBConnection {
                 String strDbUser = "stargazers"; // database loging username
                 String strDbPassword = "stars_3"; // database login password
 
-                doSshTunnel(sshUser, sshPW, sshHost, nSshPort, strRemoteHost, nLocalPort,
+                if (connect == null)
+                    doSshTunnel(sshUser, sshPW, sshHost, nSshPort, strRemoteHost, nLocalPort,
                         nRemotePort);
 
                 //Class.forName("com.mysql.jdbc.Driver"); //input driver class name
@@ -234,7 +238,7 @@ public class QueriesWithDBConnection {
 
         boolean ssh = true;
 
-        connect(args);
+        connect(args[0], args[1], args[2]);
 
         try {
             String attribute = "starMass";

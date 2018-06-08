@@ -8,7 +8,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -48,6 +50,12 @@ public class StargazerController implements Initializable {
     @FXML
     private AnchorPane starViewer;
 
+    @FXML
+    private Text starsErrorMessage;
+
+    @FXML
+    private Text importErrorMessage;
+
     private FileChooser fileChooser = null;
     private Stage stage;
 
@@ -64,10 +72,37 @@ public class StargazerController implements Initializable {
        importButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
            @Override
            public void handle(MouseEvent event) {
-               fileChooser.setInitialDirectory(new File("."));
-               fileChooser.setTitle("Select Data File");
-               File f = fileChooser.showOpenDialog(stage);
-               Parser.parse(f.getAbsolutePath());
+
+               try {
+
+                   fileChooser.setInitialDirectory(new File("."));
+                   fileChooser.setTitle("Select Data File");
+
+                   importErrorMessage.setFill(Color.CYAN);
+                   importErrorMessage.setText("Importing...");
+
+                   File f = fileChooser.showOpenDialog(stage);
+
+
+                   Parser.parse(f.getAbsolutePath());
+
+                   ArrayList<SolarSystem> stars = getSolarSystems();
+
+                   ArrayList<String> starNames = new ArrayList<String>();
+
+                   for (SolarSystem sm : stars) {
+                       starNames.add(sm.getStar().getStarName());
+                   }
+
+                   starList.setItems(FXCollections.observableArrayList(starNames));
+                   starList.refresh();
+                   importErrorMessage.setFill(Color.GREEN);
+                   importErrorMessage.setText("Done");
+               } catch (Exception e) {
+                   e.printStackTrace();
+                   importErrorMessage.setFill(Color.RED);
+                   importErrorMessage.setText("Error");
+               }
 
            }
        });
@@ -156,12 +191,15 @@ public class StargazerController implements Initializable {
         stage = s;
     }
 
-   // TODO: Must be overriden to construct the stars from the database
+
    private ArrayList<SolarSystem> getSolarSystems() {
        try {
-           return QueriesWithDBConnection.getSystems(Star.Type.BadFormat, -1, -1, -1, -1, -1, -1);
+           ArrayList<SolarSystem> ss = QueriesWithDBConnection.getSystems(Star.Type.BadFormat, -1, -1, -1, -1, -1, -1);
+           starsErrorMessage.setText("");
+           return ss;
        } catch (Exception e) {
-           //TODO error handeling
+           starsErrorMessage.setFill(Color.RED);
+           starsErrorMessage.setText("Error");
            return new ArrayList<SolarSystem>();
        }
    }
