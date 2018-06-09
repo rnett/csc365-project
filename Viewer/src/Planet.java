@@ -59,8 +59,8 @@ public class Planet {
         return Math.sqrt(Math.pow(orbitRadius, 2) - Math.pow(getMinorOrbitRadius(), 2));
     }
 
-    public Ellipse getOrbitElipse(int index, double starX, double starY, double angle) {
-        Ellipse e = new Ellipse(starX + getLinearEcentricity(), starX, getOrbitRadius(), getMinorOrbitRadius());
+    public Ellipse getOrbitElipse(double factor, int index, double starX, double starY, double angle) {
+        Ellipse e = new Ellipse(starX + getLinearEcentricity(), starX, getOrbitRadius() * factor, getMinorOrbitRadius() * factor);
 
         e.setStroke(getColor(index));
         e.setFill(Color.TRANSPARENT);

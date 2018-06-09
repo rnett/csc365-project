@@ -92,4 +92,15 @@ public class SolarSystem {
         return _golds;
     }
 
+    public double getOrbitDrawFactor(int maxPixels) {
+        double maxAU = -1;
+        for (Planet p : _planets) {
+            if (p.getOrbitRadius() > maxAU)
+                maxAU = p.getOrbitRadius();
+        }
+
+        return maxPixels / maxAU;
+
+    }
+
 }
