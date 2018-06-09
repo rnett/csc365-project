@@ -106,7 +106,8 @@ public class QueriesWithDBConnection {
 
             }
 
-
+            sqlStatement += " order by distance asc";
+            
             rs = statement.executeQuery(sqlStatement); //ResultSet is an iterator
 
             System.out.println("\nQuery executed: " + sqlStatement);
