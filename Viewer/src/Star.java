@@ -130,13 +130,13 @@ public class Star {
     }
 
     public enum Type {
+        BadFormat("Bad Format in DB", ""),
         Unknown("Unknown", "unknown"),
         Supergiant("Supergiant", "supergiant"),
         BrightGiant("Bright Giant", "bright giant"),
         Giant("Giant", "giant"),
         Subgiant("Subgiant", "subgiant"),
-        MainSequence("Main Sequence", "main sequence"),
-        BadFormat("Bad Format in DB", "");
+        MainSequence("Main Sequence", "main sequence");
 
         private String name;
         private String db;

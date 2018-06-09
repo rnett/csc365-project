@@ -4,13 +4,9 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Properties;
-import java.sql.SQLException;
 
 public class QueriesWithDBConnection {
 
@@ -57,8 +53,8 @@ public class QueriesWithDBConnection {
     Otherwise, returns empty list of solar systems on invalid SQL statements or if no filters are used.
     */
     public static ArrayList<SolarSystem> getStarsFilterByMultipleAttr(ArrayList<String> attributes,
-                                                           ArrayList<String> compareOps,
-                                                           ArrayList values, ArrayList<String> chainOps) throws SQLException {
+                                                                      ArrayList<String> compareOps,
+                                                                      ArrayList values, ArrayList<String> chainOps) {
 
         ResultSet rs = null;
         ArrayList<SolarSystem> allSys = new ArrayList<SolarSystem>();
@@ -137,44 +133,59 @@ public class QueriesWithDBConnection {
         ArrayList<Object> values = new ArrayList<Object>();
         ArrayList<String> logicalOps = new ArrayList<String>();
         String and = "and";
-        
+
         ArrayList<SolarSystem> allSys = null;
-        
-        attributes.add("type");
-        compOps.add("=");
-        values.add(type.getName());
-        logicalOps.add(and);
-        
-        attributes.add("planets");
-        compOps.add(">=");
-        values.add(planetsMin);
-        logicalOps.add(and);
-        
-        attributes.add("planets");
-        compOps.add("<=");
-        values.add(planetsMax);
-        logicalOps.add(and);
-        
-        attributes.add("goldilocksInner");
-        compOps.add(">=");
-        values.add(goldilocksMin);
-        logicalOps.add(and);
-        
-        attributes.add("goldilocksOuter");
-        compOps.add("<=");
-        values.add(goldilocksMax);
-        logicalOps.add(and);
-        
-        attributes.add("distance");
-        compOps.add(">=");
-        values.add(distanceMin);
-        logicalOps.add(and);
-        
-        attributes.add("distance");
-        compOps.add("<=");
-        values.add(distanceMax);
-        logicalOps.add(and);
-        
+
+        if (type != Star.Type.BadFormat) {
+            attributes.add("type");
+            compOps.add("=");
+            values.add(type.toDB());
+            logicalOps.add(and);
+        }
+
+        if (planetsMin >= 0) {
+            attributes.add("planets");
+            compOps.add(">=");
+            values.add(planetsMin);
+            logicalOps.add(and);
+        }
+
+        if (planetsMax >= 0) {
+            attributes.add("planets");
+            compOps.add("<=");
+            values.add(planetsMax);
+            logicalOps.add(and);
+        }
+
+        if (goldilocksMin >= 0) {
+            attributes.add("golds");
+            compOps.add(">=");
+            values.add(goldilocksMin);
+            logicalOps.add(and);
+        }
+
+        if (goldilocksMax >= 0) {
+            attributes.add("golds");
+            compOps.add("<=");
+            values.add(goldilocksMax);
+            logicalOps.add(and);
+        }
+
+        if (distanceMin >= 0) {
+            attributes.add("distance");
+            compOps.add(">=");
+            values.add(distanceMin);
+            logicalOps.add(and);
+        }
+
+
+        if (distanceMax >= 0) {
+            attributes.add("distance");
+            compOps.add("<=");
+            values.add(distanceMax);
+            logicalOps.add(and);
+        }
+
         try {
             allSys = QueriesWithDBConnection.getStarsFilterByMultipleAttr(attributes, compOps, values, logicalOps);
             
