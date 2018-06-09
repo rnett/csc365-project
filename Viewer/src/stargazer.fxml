@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
@@ -35,28 +34,28 @@
                    <Text fx:id="starsErrorMessage" layoutX="100.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="50.13671875" />
                   <TableView fx:id="starTable" layoutX="25.0" layoutY="94.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="100.0">
                     <columns>
-                      <TableColumn prefWidth="115.0" text="Name" />
-                      <TableColumn prefWidth="75.0" text="# Planets" />
-                        <TableColumn prefWidth="85.0" text="# Goldilocks" />
+                      <TableColumn fx:id="nameColumn" prefWidth="105.0" text="Name" />
+                      <TableColumn fx:id="planetColumn" text="# Planets" />
+                        <TableColumn fx:id="goldilocksColumn" prefWidth="93.0" text="# Goldilocks" />
                     </columns>
                   </TableView>
                </children></AnchorPane>
             <AnchorPane prefWidth="400.0" style="-fx-border-color: white; -fx-border-width: 0 1 0 1;">
                <children>
-                  <AnchorPane layoutX="2.0" prefHeight="450.0" prefWidth="400.0" style="-fx-border-color: white; -fx-border-width: 0 0 1 0;" AnchorPane.bottomAnchor="235.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane layoutX="3.0" prefHeight="800.0" prefWidth="396.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Label fx:id="starName" alignment="CENTER" layoutX="10.0" layoutY="14.0" style="-fx-text-fill: white;" text="Star" textAlignment="CENTER" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                        <Label fx:id="starName" alignment="CENTER" layoutX="10.0" layoutY="14.0" style="-fx-text-fill: white;" text="Star" textAlignment="CENTER" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="40.0">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <ListView fx:id="planetList" layoutX="30.0" layoutY="209.0" style="-fx-background-color: #b2bebf; -fx-border-radius: 4;" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="209.0" />
-                        <Label alignment="CENTER" layoutX="30.0" layoutY="181.0" style="-fx-text-fill: white;" text="Planets" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="181.0">
+                        <ListView fx:id="planetList" layoutX="30.0" layoutY="209.0" prefHeight="320.0" prefWidth="159.0" style="-fx-background-color: #b2bebf; -fx-border-radius: 4;" AnchorPane.bottomAnchor="118.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="205.0" AnchorPane.topAnchor="300.0" />
+                        <Label alignment="CENTER" layoutX="30.0" layoutY="181.0" prefHeight="20.0" prefWidth="161.0" style="-fx-text-fill: white;" text="Planets" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="205.0" AnchorPane.topAnchor="275.0">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <VBox layoutX="50.0" layoutY="46.0" prefHeight="97.0" prefWidth="478.0" spacing="15.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
+                        <VBox layoutX="50.0" layoutY="46.0" prefHeight="97.0" prefWidth="478.0" spacing="15.0" AnchorPane.bottomAnchor="586.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="103.0">
                            <children>
                               <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="358.0" spacing="35.0">
                                  <children>
@@ -70,7 +69,8 @@
                                           <TextField fx:id="starType" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;">
                                              <cursor>
                                                 <Cursor fx:constant="DEFAULT" />
-                                             </cursor></TextField>
+                                             </cursor>
+                                          </TextField>
                                        </children>
                                     </VBox>
                                     <VBox prefHeight="46.0" prefWidth="105.0">
@@ -83,7 +83,8 @@
                                           <TextField fx:id="starColor" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;">
                                              <cursor>
                                                 <Cursor fx:constant="DEFAULT" />
-                                             </cursor></TextField>
+                                             </cursor>
+                                          </TextField>
                                        </children>
                                     </VBox>
                                     <VBox prefHeight="46.0" prefWidth="105.0">
@@ -96,7 +97,8 @@
                                           <TextField fx:id="starMass" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;">
                                              <cursor>
                                                 <Cursor fx:constant="DEFAULT" />
-                                             </cursor></TextField>
+                                             </cursor>
+                                          </TextField>
                                        </children>
                                     </VBox>
                                  </children>
@@ -127,7 +129,8 @@
                                           <TextField fx:id="starTemp" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;">
                                              <cursor>
                                                 <Cursor fx:constant="DEFAULT" />
-                                             </cursor></TextField>
+                                             </cursor>
+                                          </TextField>
                                        </children>
                                     </VBox>
                                     <VBox prefHeight="46.0" prefWidth="105.0">
@@ -140,145 +143,99 @@
                                           <TextField fx:id="starDistance" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;">
                                              <cursor>
                                                 <Cursor fx:constant="DEFAULT" />
-                                             </cursor></TextField>
+                                             </cursor>
+                                          </TextField>
                                        </children>
                                     </VBox>
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane layoutX="2.0" layoutY="516.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0">
-                     <children>
-                        <Label fx:id="planetName" alignment="CENTER" layoutX="199.0" layoutY="13.0" style="-fx-text-fill: white;" text="Planet" textAlignment="CENTER" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <VBox layoutX="30.0" layoutY="51.0" prefHeight="97.0" prefWidth="478.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
+                        <VBox layoutX="233.0" layoutY="203.0" prefHeight="262.0" prefWidth="142.0" spacing="20.0" AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="224.0" AnchorPane.rightAnchor="30.0">
                            <children>
-                              <HBox prefHeight="30.0" prefWidth="478.0" spacing="20.0">
+                              <VBox prefHeight="46.0" prefWidth="70.0">
                                  <children>
-                                    <VBox prefHeight="46.0" prefWidth="70.0">
-                                       <children>
-                                          <Label prefHeight="16.0" prefWidth="100.0" style="-fx-text-fill: white;" text="Mass">
-                                             <VBox.margin>
-                                                <Insets bottom="4.0" />
-                                             </VBox.margin>
-                                          </Label>
-                                          <TextField fx:id="planetMass" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;">
-                                             <cursor>
-                                                <Cursor fx:constant="DEFAULT" />
-                                             </cursor></TextField>
-                                       </children>
-                                    </VBox>
-                                    <VBox prefHeight="46.0" prefWidth="68.0">
-                                       <children>
-                                          <Label prefHeight="16.0" prefWidth="100.0" style="-fx-text-fill: white;" text="Radius">
-                                             <VBox.margin>
-                                                <Insets bottom="4.0" />
-                                             </VBox.margin>
-                                          </Label>
-                                          <TextField fx:id="planetRadius" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;" />
-                                       </children>
+                                    <Label prefHeight="16.0" prefWidth="100.0" style="-fx-text-fill: white;" text="Planet Name">
+                                       <VBox.margin>
+                                          <Insets bottom="4.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <TextField fx:id="planetName" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;">
                                        <cursor>
                                           <Cursor fx:constant="DEFAULT" />
                                        </cursor>
-                                    </VBox>
-                                    <VBox prefHeight="46.0" prefWidth="58.0">
-                                       <children>
-                                          <Label prefHeight="16.0" prefWidth="100.0" style="-fx-text-fill: white;" text="Density">
-                                             <VBox.margin>
-                                                <Insets bottom="4.0" />
-                                             </VBox.margin>
-                                          </Label>
-                                          <TextField fx:id="planetDensity" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;">
-                                             <cursor>
-                                                <Cursor fx:constant="DEFAULT" />
-                                             </cursor></TextField>
-                                       </children>
-                                    </VBox>
-                                    <VBox prefHeight="46.0" prefWidth="63.0">
-                                       <children>
-                                          <Label prefHeight="16.0" prefWidth="100.0" style="-fx-text-fill: white;" text="Goldilocks">
-                                             <VBox.margin>
-                                                <Insets bottom="10.0" />
-                                             </VBox.margin>
-                                          </Label>
-                                          <CheckBox fx:id="planetGoldilocks" alignment="CENTER" blendMode="ADD" disable="true" mnemonicParsing="false" prefHeight="16.0" prefWidth="19.0" textFill="WHITE">
-                                             <VBox.margin>
-                                                <Insets left="20.0" />
-                                             </VBox.margin>
-                                          </CheckBox>
-                                       </children>
-                                    </VBox>
+                                    </TextField>
                                  </children>
-                                 <padding>
-                                    <Insets bottom="30.0" />
-                                 </padding>
-                              </HBox>
-                              <Label alignment="CENTER" prefHeight="20.0" prefWidth="391.0" style="-fx-text-fill: white;" text="Orbit">
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
-                              </Label>
-                              <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="358.0" spacing="20.0">
+                              </VBox>
+                              <VBox prefHeight="46.0" prefWidth="70.0">
                                  <children>
-                                    <VBox prefHeight="46.0" prefWidth="94.0">
-                                       <children>
-                                          <Label prefHeight="16.0" prefWidth="100.0" style="-fx-text-fill: white;" text="Radius">
-                                             <VBox.margin>
-                                                <Insets bottom="4.0" />
-                                             </VBox.margin>
-                                          </Label>
-                                          <TextField fx:id="orbitRadius" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;">
-                                             <cursor>
-                                                <Cursor fx:constant="DEFAULT" />
-                                             </cursor></TextField>
-                                       </children>
-                                    </VBox>
-                                    <VBox prefHeight="46.0" prefWidth="103.0">
-                                       <children>
-                                          <Label prefHeight="16.0" prefWidth="100.0" style="-fx-text-fill: white;" text="Period">
-                                             <VBox.margin>
-                                                <Insets bottom="4.0" />
-                                             </VBox.margin>
-                                          </Label>
-                                          <TextField fx:id="orbitPeriod" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;">
-                                             <cursor>
-                                                <Cursor fx:constant="DEFAULT" />
-                                             </cursor></TextField>
-                                       </children>
-                                    </VBox>
-                                    <VBox prefHeight="46.0" prefWidth="73.0">
-                                       <children>
-                                          <Label prefHeight="16.0" prefWidth="100.0" style="-fx-text-fill: white;" text="Eccentricity">
-                                             <VBox.margin>
-                                                <Insets bottom="4.0" />
-                                             </VBox.margin>
-                                          </Label>
-                                          <TextField fx:id="orbitEccentricity" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;">
-                                             <cursor>
-                                                <Cursor fx:constant="DEFAULT" />
-                                             </cursor></TextField>
-                                       </children>
-                                    </VBox>
-                                    <VBox prefHeight="46.0" prefWidth="69.0">
-                                       <children>
-                                          <Label prefHeight="16.0" prefWidth="100.0" style="-fx-text-fill: white;" text="Inclination">
-                                             <VBox.margin>
-                                                <Insets bottom="4.0" />
-                                             </VBox.margin>
-                                          </Label>
-                                          <TextField fx:id="orbitInclination" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;">
-                                             <cursor>
-                                                <Cursor fx:constant="DEFAULT" />
-                                             </cursor></TextField>
-                                       </children>
-                                    </VBox>
+                                    <Label prefHeight="16.0" prefWidth="100.0" style="-fx-text-fill: white;" text="Mass">
+                                       <VBox.margin>
+                                          <Insets bottom="4.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <TextField fx:id="planetMass" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;">
+                                       <cursor>
+                                          <Cursor fx:constant="DEFAULT" />
+                                       </cursor>
+                                    </TextField>
                                  </children>
-                              </HBox>
+                              </VBox>
+                              <VBox prefHeight="46.0" prefWidth="68.0">
+                                 <children>
+                                    <Label prefHeight="16.0" prefWidth="100.0" style="-fx-text-fill: white;" text="Radius">
+                                       <VBox.margin>
+                                          <Insets bottom="4.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <TextField fx:id="planetRadius" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;" />
+                                 </children>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
+                              </VBox>
+                              <VBox prefHeight="46.0" prefWidth="58.0">
+                                 <children>
+                                    <Label prefHeight="16.0" prefWidth="100.0" style="-fx-text-fill: white;" text="Density">
+                                       <VBox.margin>
+                                          <Insets bottom="4.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <TextField fx:id="planetDensity" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;">
+                                       <cursor>
+                                          <Cursor fx:constant="DEFAULT" />
+                                       </cursor>
+                                    </TextField>
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="46.0" prefWidth="94.0">
+                                 <children>
+                                    <Label prefHeight="16.0" prefWidth="100.0" style="-fx-text-fill: white;" text="Orbital Radius">
+                                       <VBox.margin>
+                                          <Insets bottom="4.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <TextField fx:id="orbitRadius" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;">
+                                       <cursor>
+                                          <Cursor fx:constant="DEFAULT" />
+                                       </cursor>
+                                    </TextField>
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="46.0" prefWidth="103.0">
+                                 <children>
+                                    <Label prefHeight="16.0" prefWidth="100.0" style="-fx-text-fill: white;" text="Orbital Period">
+                                       <VBox.margin>
+                                          <Insets bottom="4.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <TextField fx:id="orbitPeriod" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;">
+                                       <cursor>
+                                          <Cursor fx:constant="DEFAULT" />
+                                       </cursor>
+                                    </TextField>
+                                 </children>
+                              </VBox>
                            </children>
                         </VBox>
                      </children>

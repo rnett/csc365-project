@@ -47,13 +47,9 @@ public class StargazerController implements Initializable {
     private TextField starTemp;
     @FXML
     private TextField starDistance;
-    @FXML
-    private TextField starGoldilocksInner;
-    @FXML
-    private TextField starGoldilocksOuter;
 
     @FXML
-    private Label planetName;
+    private TextField planetName;
     @FXML
     private TextField planetMass;
     @FXML
@@ -61,16 +57,9 @@ public class StargazerController implements Initializable {
     @FXML
     private TextField planetDensity;
     @FXML
-    private CheckBox planetGoldilocks;
-
-    @FXML
     private TextField orbitRadius;
     @FXML
     private TextField orbitPeriod;
-    @FXML
-    private TextField orbitEccentricity;
-    @FXML
-    private TextField orbitInclination;
 
     @FXML
     private Button importButton;
@@ -195,12 +184,9 @@ public class StargazerController implements Initializable {
                 planetMass.setText(doubleString(planet.getMass()));
                 planetRadius.setText(doubleString(planet.getRadius()));
                 planetDensity.setText(doubleString(planet.getDensity()));
-                planetGoldilocks.setSelected(planet.isGoldilocks());
 
                 orbitRadius.setText(doubleString(planet.getOrbitRadius()));
                 orbitPeriod.setText(doubleString(planet.getOrbitPeriod()));
-                orbitEccentricity.setText(doubleString(planet.getOrbitEccentricity()));
-                orbitInclination.setText(doubleString(planet.getOrbitInclination()));
             }
         });
         planetList.setItems(FXCollections.observableArrayList(getPlanets()));
