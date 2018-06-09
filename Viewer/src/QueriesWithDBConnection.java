@@ -54,16 +54,16 @@ public class QueriesWithDBConnection {
     */
     public static ArrayList<SolarSystem> getStarsFilterByMultipleAttr(ArrayList<String> attributes,
                                                                       ArrayList<String> compareOps,
-                                                                      ArrayList values, ArrayList<String> chainOps) {
+                                                                      ArrayList values, ArrayList<String> chainOps) throws SQLException {
 
         ResultSet rs = null;
         ArrayList<SolarSystem> allSys = new ArrayList<SolarSystem>();
 
         //building SQL statement to be executed
-        try {
+
             Statement statement = connect().createStatement();
 
-            String sqlStatement = "select * from stargazers.stars natural join stargazers.planets";
+        String sqlStatement = "select * from stargazers.solarSystems";
 
             if (attributes.isEmpty() || compareOps.isEmpty() ||
                     ((attributes.size() != compareOps.size()) && (compareOps.size() != values.size())) ||
@@ -111,13 +111,9 @@ public class QueriesWithDBConnection {
 
             System.out.println("\nQuery executed: " + sqlStatement);
 
-            while( !rs.isAfterLast() ) 
-                allSys.add(new SolarSystem(rs) );
-            
 
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        while( !rs.isAfterLast() )
+                allSys.add(new SolarSystem(rs) );
 
         
         return allSys;
@@ -186,13 +182,10 @@ public class QueriesWithDBConnection {
             logicalOps.add(and);
         }
 
-        try {
-            allSys = QueriesWithDBConnection.getStarsFilterByMultipleAttr(attributes, compOps, values, logicalOps);
-            
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        
+
+        allSys = QueriesWithDBConnection.getStarsFilterByMultipleAttr(attributes, compOps, values, logicalOps);
+
+
         return allSys;
     }
 
