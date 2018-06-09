@@ -65,6 +65,10 @@ public class Planet {
         e.setStroke(getColor(index));
         e.setFill(Color.TRANSPARENT);
 
+        if (goldilocks) {
+            e.setStrokeWidth(2);
+        }
+
         Rotate r = new Rotate();
         r.setPivotX(starX);
         r.setPivotY(starY);
