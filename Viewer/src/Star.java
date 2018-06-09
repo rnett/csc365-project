@@ -118,7 +118,7 @@ public class Star {
 
         public static Color fromDB(String data) {
             for (Color c : Color.values()) {
-                if (c.db == data)
+                if (c.db.equals(data))
                     return c;
             }
             return BadFormat;
