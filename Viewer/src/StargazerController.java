@@ -13,6 +13,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.File;
 import java.net.URL;
@@ -24,7 +25,13 @@ public class StargazerController implements Initializable {
     @FXML
     private ListView<String> planetList;
     @FXML
-    private ListView<String> starList;
+    private TableView<SolarSystem> starTable;
+    @FXML
+    private TableColumn nameColumn;
+    @FXML
+    private TableColumn planetColumn;
+    @FXML
+    private TableColumn goldilocksColumn;
 
     @FXML
     private Label starName;
@@ -89,6 +96,9 @@ public class StargazerController implements Initializable {
 
         fileChooser = new FileChooser();
 
+        nameColumn.setCellValueFactory(new PropertyValueFactory<SolarSystem, String>("name"));
+        planetColumn.setCellValueFactory(new PropertyValueFactory<SolarSystem, Integer>("planets"));
+        goldilocksColumn.setCellValueFactory(new PropertyValueFactory<SolarSystem, Integer>("goldilocks"));
 
         importButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -109,13 +119,7 @@ public class StargazerController implements Initializable {
 
                     ArrayList<SolarSystem> stars = getSolarSystems();
 
-                    ArrayList<String> starNames = new ArrayList<String>();
-
-                    for (SolarSystem sm : stars) {
-                        starNames.add(sm.getStar().getStarName());
-                    }
-
-                    starList.setItems(FXCollections.observableArrayList(starNames));
+                    starTable.setItems(FXCollections.observableArrayList(stars));
                     starList.refresh();
                     importErrorMessage.setFill(Color.GREEN);
                     importErrorMessage.setText("Done");
@@ -130,25 +134,13 @@ public class StargazerController implements Initializable {
 
         ObservableList<SolarSystem> stars = FXCollections.observableArrayList(getSolarSystems());
 
-        ArrayList<String> starNames = new ArrayList<String>();
+        starTable.setItems(FXCollections.observableArrayList(stars));
 
-        for (SolarSystem sm : stars) {
-            starNames.add(sm.getStar().getStarName());
-        }
-
-        starList.setItems(FXCollections.observableArrayList(starNames));
-
-        starList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+        starTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<SolarSystem>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                starName.setText(newValue);
-                for (SolarSystem sm : stars) {
-                    if (sm.getStar().getStarName().equals(newValue)) {
-                        solarSystem = sm;
-                        star = solarSystem.getStar();
-                        break;
-                    }
-                }
+            public void changed(ObservableValue<? extends SolarSystem> observable, SolarSystem oldValue, SolarSystem newValue) {
+                starName.setText(newValue.getStar().getStarName());
+                star = newValue.getStar();
 
                 starType.setText(star.getType().getName());
                 starColor.setText(star.getColor().getName());
@@ -156,8 +148,6 @@ public class StargazerController implements Initializable {
                 starRadius.setText(doubleString(star.getRadius()));
                 starTemp.setText(doubleString(star.getTemp()) + " K");
                 starDistance.setText(doubleString(star.getDistance()) + " LY");
-                starGoldilocksInner.setText(doubleString(star.getGoldilocksInner()) + " AU");
-                starGoldilocksOuter.setText(doubleString(star.getGoldilocksOuter()) + " AU");
 
                 planetList.setItems(FXCollections.observableArrayList(getPlanets()));
                 planetList.getSelectionModel().select(0);
@@ -183,10 +173,10 @@ public class StargazerController implements Initializable {
 
                 //TODO refresh starViewer?
                 starViewer.requestLayout();
-
+                planetList.getSelectionModel().select(0);
             }
         });
-        starList.getSelectionModel().select(0);
+        starTable.getSelectionModel().select(0);
 
         planetList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
