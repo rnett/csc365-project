@@ -14,9 +14,9 @@ public class SolarSystem {
     private Star star;
 
     private final SimpleStringProperty name;
-    private final SimpleIntegerProperty planets;
+    private final SimpleIntegerProperty planetCount;
     private final SimpleIntegerProperty goldilocks;
-    private ArrayList<Planet> _planets;
+    private ArrayList<Planet> planets;
 
     //TODO verify rs.previous() works as intended.
     private int _golds = -1;
@@ -43,9 +43,9 @@ public class SolarSystem {
 
                 star = new Star(rs);
 
-                _planets = new ArrayList<Planet>();
+                planets = new ArrayList<Planet>();
 
-                _planets.add(new Planet(rs));
+                planets.add(new Planet(rs));
 
                 isFirstIteration = false;
             } else {
@@ -59,7 +59,7 @@ public class SolarSystem {
                 }
 
 
-                _planets.add(new Planet(rs));
+                planets.add(new Planet(rs));
 
                 }
 
@@ -69,19 +69,19 @@ public class SolarSystem {
             rs.previous();
 
         this.name = new SimpleStringProperty(getStar().getStarName());
-        this.planets = new SimpleIntegerProperty(getPlanets().size());
+        this.planetCount = new SimpleIntegerProperty(getPlanets().size());
         this.goldilocks = new SimpleIntegerProperty(getNumberGoldilocksPlanets());
 
     }
 
     public ArrayList<Planet> getPlanets() {
-        return _planets;
+        return planets;
     }
 
     public int getNumberGoldilocksPlanets() {
         if (_golds == -1) {
             int c = 0;
-            for (Planet p : _planets) {
+            for (Planet p : planets) {
                 if (p.isGoldilocks())
                     c++;
             }
@@ -94,13 +94,25 @@ public class SolarSystem {
 
     public double getOrbitDrawFactor(int maxPixels) {
         double maxAU = -1;
-        for (Planet p : _planets) {
+        for (Planet p : planets) {
             if (p.getOrbitRadius() > maxAU)
                 maxAU = p.getOrbitRadius();
         }
 
-        return maxPixels / maxAU;
+        return maxPixels / (maxAU * 2.5);
 
+    }
+
+    public String getName() {
+        return star.getStarName();
+    }
+
+    public int getPlanetCount() {
+        return getPlanets().size();
+    }
+
+    public int getGoldilocks() {
+        return getNumberGoldilocksPlanets();
     }
 
 }

@@ -21,7 +21,8 @@ public class ViewRunner extends Application {
         SimpleView defaultView = new SimpleView(viewTemplate);
         Parent root = defaultView.getRoot();
 
-        Scene scene = new Scene(root, 1024, 768);
+        Scene scene = new Scene(root);
+
 
         defaultView.getController().setStage(stage);
 
