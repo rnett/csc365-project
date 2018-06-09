@@ -182,6 +182,7 @@ public class QueriesWithDBConnection {
             logicalOps.add(and);
         }
 
+        logicalOps.remove(logicalOps.size() - 1);
 
         allSys = QueriesWithDBConnection.getStarsFilterByMultipleAttr(attributes, compOps, values, logicalOps);
 
@@ -263,77 +264,14 @@ public class QueriesWithDBConnection {
         connect(args[0], args[1], args[2]); //host name, ssh username, ssh password
 
         try {
-            
-            /*Class.forName("com.mysql.jdbc.Driver"); //input driver class name
-            //input database url, user and password
-            connect = DriverManager.getConnection("jdbc:mysql://ambari-head.csc.calpoly.edu:3306?zeroDateTimeBehavior=convertToNull", 
-                    "stargazers", "stars_3");*/
-            
-            ArrayList<String> attributes = new ArrayList<String>();
-            ArrayList<String> compOps = new ArrayList<String>();
-            ArrayList<Object> values = new ArrayList<Object>();
-            ArrayList<String> logicalOps = new ArrayList<String>();
-            
-            attributes.add("starMass");
-            compOps.add("=");
-            values.add(1.08);
-
-            ArrayList<SolarSystem> s1 = QueriesWithDBConnection.getStarsFilterByMultipleAttr(attributes, compOps, values, logicalOps);
-            
-            System.out.println("\nSolarSystem 1:");
-            
-            for(SolarSystem sys: s1) {
-                Star s = sys.getStar();
-                ArrayList<Planet> planets = sys.getPlanets();
-                System.out.println("starName: " + s.getStarName());
-                
-                for(Planet p: planets) {
-                    System.out.println("     planetMass: " + p.getMass());
-                }
-            }
-
-            attributes = new ArrayList<String>();
-            compOps = new ArrayList<String>();
-            values = new ArrayList<Object>();
-            logicalOps = new ArrayList<String>();
-            
-            attributes.add("goldilocksInner"); //0
-            attributes.add("goldilocksOuter");//1
-            attributes.add("type");
-            
-            compOps.add(">="); //0
-            compOps.add("<=");//1
-            compOps.add("=");
-            
-            values.add(6.00);//0
-            values.add(20.00);//1
-            values.add("supergiant");
-            
-            logicalOps.add("and"); //0 and 1
-            logicalOps.add("and");
-
-            ArrayList<SolarSystem> s2 = QueriesWithDBConnection.getStarsFilterByMultipleAttr(attributes, compOps, values, logicalOps);
-            
-            System.out.println("\nSolarSystem 2:");
-            
-            for(SolarSystem sys: s2) {
-                Star s = sys.getStar();
-                ArrayList<Planet> planets = sys.getPlanets();
-                System.out.println("starName: " + s.getStarName());
-                
-                for(Planet p: planets) {
-                    System.out.println("     planetMass: " + p.getMass());
-                }
-            }
-
-        } catch(Exception e) {
-            System.out.println(e.getMessage());
+            ArrayList<SolarSystem> systems = getSystems(Star.Type.Supergiant, 2, -1, 1, 3, -1, -1);
+            close();
             return;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        
-
-
+        close();
     }
 
 }
