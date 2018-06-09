@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.sql.SQLException;
 
 public class QueriesWithDBConnection {
 
@@ -45,68 +46,24 @@ public class QueriesWithDBConnection {
         return connect;
     }
 
-    /*query from stars table and filter by condition for an attribute
-    for values, you must pass in the appropriate type depending on the column
-    
-    operators supported: =, >=, <=
-    
-    user for sql statements like:
-    select * from stargazers.stars where ___
-    */
-    public static SolarSystem getStarsFilterBySingleAttr(String attribute, String compareOp, Object value) throws Exception {
-
-        ResultSet rs = null;
-
-        try {
-            Statement statement = connect().createStatement();
-
-            String sqlStatement = "select * from stargazers.stars natural join stargazers.planets";
-
-            if(attribute == null || compareOp == null) {
-                return new SolarSystem(rs);
-            }
-
-
-            if(compareOp != "<=" && compareOp != "=" && compareOp != ">=") {
-                System.out.println("Unsupported operator.");
-                return new SolarSystem(rs);
-            }
-
-            if(value instanceof String || value instanceof Double || value instanceof Integer) {
-                sqlStatement += " where " + attribute + " " + compareOp + " " + value;
-            } else {
-                System.out.println("Invalid value");
-                return new SolarSystem(rs);
-            }
-
-            rs = statement.executeQuery(sqlStatement); //ResultSet is an iterator
-
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-        return new SolarSystem(rs);
-    }
-
-    public static ArrayList<SolarSystem> getSystems(Star.Type type, int planetsMin, int planetsMax, int goldilocksMin, int goldilocksMax, int distanceMin, int distanceMax) {
-
-
-        return new ArrayList<SolarSystem>();
-    }
-
     /*
+    Filtering queries involving one or more attributes.
     
-    underlying goal: Act as a filter for goldilocks or queries involving multiple attributes.
+    supported comparison operators: <=, =, >=
+    supported values: double, int, String
+    supported logical operators (chainOps): and, or
     
-    supported logical operators: and, or
+    Returns information on all solar systems (system with a star and at least one planet orbiting around it).
+    Otherwise, returns empty list of solar systems on invalid SQL statements or if no filters are used.
     */
-    public static SolarSystem getStarsFilterByMultipleAttr(ArrayList<String> attributes,
+    public static ArrayList<SolarSystem> getStarsFilterByMultipleAttr(ArrayList<String> attributes,
                                                            ArrayList<String> compareOps,
-                                                           ArrayList values, ArrayList<String> chainOps) throws Exception {
+                                                           ArrayList values, ArrayList<String> chainOps) throws SQLException {
 
         ResultSet rs = null;
+        ArrayList<SolarSystem> allSys = new ArrayList<SolarSystem>();
 
+        //building SQL statement to be executed
         try {
             Statement statement = connect().createStatement();
 
@@ -115,7 +72,7 @@ public class QueriesWithDBConnection {
             if (attributes.isEmpty() || compareOps.isEmpty() ||
                     ((attributes.size() != compareOps.size()) && (compareOps.size() != values.size())) ||
                     chainOps.size() != attributes.size() - 1) {
-                return new SolarSystem(rs);
+                return allSys;
             }
 
             if(attributes.size() > 0) {
@@ -125,12 +82,11 @@ public class QueriesWithDBConnection {
             for(int i = 0; i < attributes.size(); i++) {
 
                 if( compareOps.get(i) != "<=" && compareOps.get(i) != "=" &&  compareOps.get(i) != ">=" ) {
-                    System.out.println("Unsupported operator.");
-                    rs = null;
-                    return new SolarSystem(rs);
+                    System.out.println("Unsupported comparison operator.");
+                    return allSys;
                 }
 
-                if( (values.get(i) instanceof String || values.get(i) instanceof Double || values.get(i) instanceof Integer) ) {
+                if( (values.get(i) instanceof Double || values.get(i) instanceof Integer) ) {
 
                     if(!chainOps.isEmpty()) {
                         sqlStatement += attributes.get(i) + " " + compareOps.get(i) + " " + values.get(i) + " " + chainOps.remove(0) + " ";
@@ -138,10 +94,17 @@ public class QueriesWithDBConnection {
                         sqlStatement += attributes.get(i) + " " + compareOps.get(i) + " " + values.get(i);
                     }
 
+                } else if(values.get(i) instanceof String) {
+                    
+                    if(!chainOps.isEmpty()) {
+                        sqlStatement += attributes.get(i) + " " + compareOps.get(i) + " \'" + values.get(i) + "\' " + chainOps.remove(0) + " ";
+                    } else {
+                        sqlStatement += attributes.get(i) + " " + compareOps.get(i) + " \'" + values.get(i) + "\'";
+                    }
+                    
                 } else {
-                    System.out.println("Invalid value");
-                    rs = null;
-                    return new SolarSystem(rs);
+                    System.out.println("Value needs to be either a string, double or integer.");
+                    return allSys;
                 }
 
 
@@ -150,23 +113,76 @@ public class QueriesWithDBConnection {
 
             rs = statement.executeQuery(sqlStatement); //ResultSet is an iterator
 
-            System.out.println("Query being executed: " + sqlStatement);
+            System.out.println("\nQuery executed: " + sqlStatement);
 
-            //testing... delete later
-            while(rs.next()) {
-                String starName = rs.getString("starName");
-                double goldilocksInner = rs.getDouble("goldilocksInner");
-                double goldilocksOuter = rs.getDouble("goldilocksOuter");
-                System.out.println("starName: " + starName + " " + "goldilocksInner: " + goldilocksInner + " goldilocksOuter: " + goldilocksOuter);
+            while( !rs.isAfterLast() ) 
+                allSys.add(new SolarSystem(rs) );
+            
 
-            }
-
-
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
-        return new SolarSystem(rs);
+        
+        return allSys;
+    }
+    
+    public static ArrayList<SolarSystem> getSystems(Star.Type type, 
+            int planetsMin, int planetsMax, 
+            int goldilocksMin, int goldilocksMax, 
+            int distanceMin, int distanceMax) {
+
+        ArrayList<String> attributes = new ArrayList<String>();
+        ArrayList<String> compOps = new ArrayList<String>();
+        ArrayList<Object> values = new ArrayList<Object>();
+        ArrayList<String> logicalOps = new ArrayList<String>();
+        String and = "and";
+        
+        ArrayList<SolarSystem> allSys = null;
+        
+        attributes.add("type");
+        compOps.add("=");
+        values.add(type.getName());
+        logicalOps.add(and);
+        
+        attributes.add("planets");
+        compOps.add(">=");
+        values.add(planetsMin);
+        logicalOps.add(and);
+        
+        attributes.add("planets");
+        compOps.add("<=");
+        values.add(planetsMax);
+        logicalOps.add(and);
+        
+        attributes.add("goldilocksInner");
+        compOps.add(">=");
+        values.add(goldilocksMin);
+        logicalOps.add(and);
+        
+        attributes.add("goldilocksOuter");
+        compOps.add("<=");
+        values.add(goldilocksMax);
+        logicalOps.add(and);
+        
+        attributes.add("distance");
+        compOps.add(">=");
+        values.add(distanceMin);
+        logicalOps.add(and);
+        
+        attributes.add("distance");
+        compOps.add("<=");
+        values.add(distanceMax);
+        logicalOps.add(and);
+        
+        try {
+            allSys = QueriesWithDBConnection.getStarsFilterByMultipleAttr(attributes, compOps, values, logicalOps);
+            
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        
+        return allSys;
     }
 
     public static void close() {
@@ -238,41 +254,80 @@ public class QueriesWithDBConnection {
 
     public static void main(String[] args) {
 
+        //call connect  to connect from off campus
         boolean ssh = true;
-
-        connect(args[0], args[1], args[2]);
+        connect(args[0], args[1], args[2]); //host name, ssh username, ssh password
 
         try {
-            String attribute = "starMass";
-            String compOp = "=";
-            double value = 1.08;
-
-            QueriesWithDBConnection.getStarsFilterBySingleAttr(attribute, compOp, value);
-
+            
+            /*Class.forName("com.mysql.jdbc.Driver"); //input driver class name
+            //input database url, user and password
+            connect = DriverManager.getConnection("jdbc:mysql://ambari-head.csc.calpoly.edu:3306?zeroDateTimeBehavior=convertToNull", 
+                    "stargazers", "stars_3");*/
+            
             ArrayList<String> attributes = new ArrayList<String>();
-            attributes.add("goldilocksInner");
-            attributes.add("goldilocksOuter");
             ArrayList<String> compOps = new ArrayList<String>();
-            compOps.add(">=");
-            compOps.add("<=");
-            ArrayList<Double> values = new ArrayList<Double>();
-            values.add(6.00);
-            values.add(20.00);
+            ArrayList<Object> values = new ArrayList<Object>();
             ArrayList<String> logicalOps = new ArrayList<String>();
+            
+            attributes.add("starMass");
+            compOps.add("=");
+            values.add(1.08);
+
+            ArrayList<SolarSystem> s1 = QueriesWithDBConnection.getStarsFilterByMultipleAttr(attributes, compOps, values, logicalOps);
+            
+            System.out.println("\nSolarSystem 1:");
+            
+            for(SolarSystem sys: s1) {
+                Star s = sys.getStar();
+                ArrayList<Planet> planets = sys.getPlanets();
+                System.out.println("starName: " + s.getStarName());
+                
+                for(Planet p: planets) {
+                    System.out.println("     planetMass: " + p.getMass());
+                }
+            }
+
+            attributes = new ArrayList<String>();
+            compOps = new ArrayList<String>();
+            values = new ArrayList<Object>();
+            logicalOps = new ArrayList<String>();
+            
+            attributes.add("goldilocksInner"); //0
+            attributes.add("goldilocksOuter");//1
+            attributes.add("type");
+            
+            compOps.add(">="); //0
+            compOps.add("<=");//1
+            compOps.add("=");
+            
+            values.add(6.00);//0
+            values.add(20.00);//1
+            values.add("supergiant");
+            
+            logicalOps.add("and"); //0 and 1
             logicalOps.add("and");
 
-            QueriesWithDBConnection.getStarsFilterByMultipleAttr(attributes, compOps, values, logicalOps);
+            ArrayList<SolarSystem> s2 = QueriesWithDBConnection.getStarsFilterByMultipleAttr(attributes, compOps, values, logicalOps);
+            
+            System.out.println("\nSolarSystem 2:");
+            
+            for(SolarSystem sys: s2) {
+                Star s = sys.getStar();
+                ArrayList<Planet> planets = sys.getPlanets();
+                System.out.println("starName: " + s.getStarName());
+                
+                for(Planet p: planets) {
+                    System.out.println("     planetMass: " + p.getMass());
+                }
+            }
 
         } catch(Exception e) {
             System.out.println(e.getMessage());
             return;
         }
 
-        //--------------------------------
-        // This space is for putting your own driver code for development purposes.
-
-
-        //--------------------------------
+        
 
 
     }
