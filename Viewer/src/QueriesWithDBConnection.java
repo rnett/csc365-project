@@ -119,10 +119,10 @@ public class QueriesWithDBConnection {
         return allSys;
     }
     
-    public static ArrayList<SolarSystem> getSystems(Star.Type type, 
-            int planetsMin, int planetsMax, 
-            int goldilocksMin, int goldilocksMax, 
-            int distanceMin, int distanceMax) {
+    public static ArrayList<SolarSystem> getSystems(Star.Type type,
+                                                    int planetsMin, int planetsMax,
+                                                    int goldilocksMin, int goldilocksMax,
+                                                    int distanceMin, int distanceMax) throws SQLException {
 
         ArrayList<String> attributes = new ArrayList<String>();
         ArrayList<String> compOps = new ArrayList<String>();
