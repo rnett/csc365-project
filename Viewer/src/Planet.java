@@ -66,7 +66,7 @@ public class Planet {
         e.setFill(Color.TRANSPARENT);
 
         if (goldilocks) {
-            e.setStrokeWidth(2);
+            e.setStrokeWidth(3);
         }
 
         Rotate r = new Rotate();

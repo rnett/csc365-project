@@ -65,9 +65,9 @@ public class QueriesWithDBConnection {
 
         String sqlStatement = "select * from stargazers.solarSystems";
 
-        if (attributes.isEmpty() || compareOps.isEmpty() ||
+        if (!attributes.isEmpty() && (compareOps.isEmpty() ||
                 ((attributes.size() != compareOps.size()) && (compareOps.size() != values.size())) ||
-                chainOps.size() != attributes.size() - 1) {
+                chainOps.size() != attributes.size() - 1)) {
             return allSys;
         }
 
@@ -188,7 +188,8 @@ public class QueriesWithDBConnection {
             logicalOps.add(and);
         }
 
-        logicalOps.remove(logicalOps.size() - 1);
+        if (logicalOps.size() > 0)
+            logicalOps.remove(logicalOps.size() - 1);
 
         allSys = QueriesWithDBConnection.getStarsFilterByMultipleAttr(attributes, compOps, values, logicalOps);
 

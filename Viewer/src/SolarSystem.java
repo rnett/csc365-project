@@ -1,8 +1,5 @@
 //package exoplanetsolarsystemviewer; //comment out later when whole program gets integrated
 
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,9 +11,6 @@ import java.util.Comparator;
 public class SolarSystem {
     private Star star;
 
-    private final SimpleStringProperty name;
-    private final SimpleIntegerProperty planetCount;
-    private final SimpleIntegerProperty goldilocks;
     private ArrayList<Planet> planets;
 
     //TODO verify rs.previous() works as intended.
@@ -75,16 +69,12 @@ public class SolarSystem {
             public int compare(Planet o1, Planet o2) {
                 if (o1.getOrbitRadius() > o2.getOrbitRadius())
                     return 1;
-                else if (o1.getOrbitRadius() < o1.getOrbitRadius())
+                else if (o1.getOrbitRadius() < o2.getOrbitRadius())
                     return -1;
                 else
                     return 0;
             }
         });
-
-        this.name = new SimpleStringProperty(getStar().getStarName());
-        this.planetCount = new SimpleIntegerProperty(getPlanets().size());
-        this.goldilocks = new SimpleIntegerProperty(getNumberGoldilocksPlanets());
 
     }
 
@@ -129,4 +119,7 @@ public class SolarSystem {
         return getNumberGoldilocksPlanets();
     }
 
+    public Double getDistance() {
+        return getStar().getDistance();
+    }
 }

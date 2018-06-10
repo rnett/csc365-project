@@ -1,7 +1,6 @@
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,6 +17,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -32,6 +32,8 @@ public class StargazerController implements Initializable {
     private TableColumn planetColumn;
     @FXML
     private TableColumn goldilocksColumn;
+    @FXML
+    private TableColumn distanceColumn;
 
     @FXML
     private ComboBox typeSelect;
@@ -103,10 +105,25 @@ public class StargazerController implements Initializable {
         nameColumn.setCellValueFactory(new PropertyValueFactory<SolarSystem, String>("name"));
         planetColumn.setCellValueFactory(new PropertyValueFactory<SolarSystem, Integer>("planetCount"));
         goldilocksColumn.setCellValueFactory(new PropertyValueFactory<SolarSystem, Integer>("goldilocks"));
+        distanceColumn.setCellValueFactory(new PropertyValueFactory<SolarSystem, Double>("distance"));
+
+        distanceColumn.setComparator(new Comparator<Double>() {
+            @Override
+            public int compare(Double o1, Double o2) {
+                if (o1 < 0 && o2 >= 0)
+                    return 100;
+                else if (o2 < 0 && o1 >= 0)
+                    return -100;
+                else if (o1 < 0 && o2 < 0)
+                    return 0;
+                else return o1.compareTo(o2);
+            }
+        });
 
         typeSelect.getItems().addAll(
            "All",
            "Unknown",
+                "Supergiant",
            "Bright Giant",
            "Giant",
            "Subgiant",
@@ -117,8 +134,10 @@ public class StargazerController implements Initializable {
             protected void updateItem(Planet item, boolean empty) {
                 super.updateItem(item, empty);
 
-                if (empty || item == null)
+                if (empty || item == null) {
                     setText("");
+                    setStyle("-fx-control-inner-background: derive(-fx-base, 80%);");
+                }
                 else {
                     setText(item.getLetter());
 
@@ -158,6 +177,13 @@ public class StargazerController implements Initializable {
                     importErrorMessage.setText("Done");
                 } catch (Exception e) {
                     e.printStackTrace();
+
+                    if (e.getMessage().contains("Duplicate entry")) {
+                        importErrorMessage.setFill(Color.RED);
+                        importErrorMessage.setText("Error: Duplicate Entry");
+                        return;
+                    }
+
                     importErrorMessage.setFill(Color.RED);
                     importErrorMessage.setText("Error");
                 }
@@ -165,9 +191,7 @@ public class StargazerController implements Initializable {
             }
         });
 
-        ObservableList<SolarSystem> stars = FXCollections.observableArrayList(getSolarSystems());
-
-        starTable.setItems(FXCollections.observableArrayList(stars));
+        starTable.setItems(FXCollections.observableArrayList(getSolarSystems()));
 
         starTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<SolarSystem>() {
             @Override
@@ -182,6 +206,7 @@ public class StargazerController implements Initializable {
                 starTemp.setText(doubleString(star.getTemp()) + " K");
                 starDistance.setText(doubleString(star.getDistance()) + " LY");
 
+                planetList.getItems().clear();
                 planetList.setItems(FXCollections.observableArrayList(newValue.getPlanets()));
 
                 for (int i = 0; i < newValue.getPlanetCount(); i++) {
@@ -238,14 +263,60 @@ public class StargazerController implements Initializable {
     }
 
 
+    private int parseFilter(TextField filter) {
+        if (filter.getText().trim().equals(""))
+            return -1;
+
+        try {
+            return (int) Double.parseDouble(filter.getText());
+        } catch (Exception e) {
+
+            return -1;
+        }
+
+    }
+
+    private Star.Type parseComboBox(ComboBox cb) {
+
+        if (cb == null || cb.getSelectionModel().getSelectedItem() == null)
+            return Star.Type.BadFormat;
+
+        String name = cb.getSelectionModel().getSelectedItem().toString();
+
+        if (name.equals("All") || name.trim().equals("")) {
+            return Star.Type.BadFormat;
+        }
+
+        for (Star.Type t : Star.Type.values()) {
+            if (t.getName().equals(name))
+                return t;
+        }
+
+        return Star.Type.BadFormat;
+    }
+
     private ArrayList<SolarSystem> getSolarSystems() {
         try {
             ArrayList<SolarSystem> ss = QueriesWithDBConnection.getSystems(
-                    Star.Type.BadFormat,
-                    6, -1,
-                    -1, -1,
-                    -1, -1);
+                    parseComboBox(typeSelect),
+                    parseFilter(minPlanets), parseFilter(maxPlanets),
+                    parseFilter(minGoldilocks), parseFilter(maxGoldilocks),
+                    parseFilter(minDistance), parseFilter(maxDistance));
             starsErrorMessage.setText("");
+
+            ss.sort(new Comparator<SolarSystem>() {
+                @Override
+                public int compare(SolarSystem o1, SolarSystem o2) {
+                    if (o1.getDistance() < 0 && o2.getDistance() >= 0)
+                        return 100;
+                    else if (o2.getDistance() < 0 && o1.getDistance() >= 0)
+                        return -100;
+                    else if (o1.getDistance() < 0 && o2.getDistance() < 0)
+                        return 0;
+                    else return o1.getDistance().compareTo(o2.getDistance());
+                }
+            });
+
             return ss;
         } catch (Exception e) {
             e.printStackTrace();
@@ -256,10 +327,10 @@ public class StargazerController implements Initializable {
     }
 
     private String doubleString(Double value) {
-        return (value != null || value < 0) ? Double.toString(value) : "N/A";
+        return (value != null && value >= 0) ? Double.toString(value) : "N/A";
     }
 
     public void handleFilterChanged() {
-       // Call update which will read all the filters and run the query
+        starTable.setItems(FXCollections.observableArrayList(getSolarSystems()));
     }
 }
