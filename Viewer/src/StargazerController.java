@@ -332,5 +332,6 @@ public class StargazerController implements Initializable {
 
     public void handleFilterChanged() {
         starTable.setItems(FXCollections.observableArrayList(getSolarSystems()));
+        starTable.getSelectionModel().select(0);
     }
 }

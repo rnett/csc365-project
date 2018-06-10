@@ -48,6 +48,8 @@
                   <Label layoutX="174.0" layoutY="266.0" text="Max Distance" textFill="WHITE" />
                   <TextField fx:id="minDistance" layoutX="15.0" layoutY="289.0" onAction="#handleFilterChanged" prefHeight="26.0" prefWidth="126.0" style="-fx-background-color: white;" AnchorPane.leftAnchor="10.0" />
                   <Label layoutX="15.0" layoutY="270.0" text="Min Distance" textFill="WHITE" />
+                  <Button layoutX="232.0" layoutY="86.0" mnemonicParsing="false" onMouseClicked="#handleFilterChanged"
+                          text="Refresh"/>
                </children></AnchorPane>
             <AnchorPane prefWidth="400.0" style="-fx-border-color: white; -fx-border-width: 0 1 0 1;">
                <children>
