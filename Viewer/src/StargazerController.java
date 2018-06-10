@@ -312,7 +312,7 @@ public class StargazerController implements Initializable {
                     parseComboBox(typeSelect),
                     parseFilter(minPlanets), parseFilter(maxPlanets),
                     parseFilter(minGoldilocks), parseFilter(maxGoldilocks),
-                    parseFilter(minDistance), parseFilter(maxDistance));
+                    (int) (parseFilter(minDistance) / 3.26D), (int) (parseFilter(maxDistance) / 3.26D));
             starsErrorMessage.setText("");
 
             ss.sort(new Comparator<SolarSystem>() {
