@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -183,6 +184,16 @@
                                     </TextField>
                                  </children>
                               </VBox>
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                 <children>
+                                    <Label text="Goldilocks" textFill="WHITE" />
+                                    <CheckBox fx:id="planetGoldilocks" disable="true" mnemonicParsing="false" style="-fx-text-fill: white;" textFill="WHITE">
+                                       <cursor>
+                                          <Cursor fx:constant="DEFAULT" />
+                                       </cursor>
+                                    </CheckBox>
+                                 </children>
+                              </HBox>
                               <VBox prefHeight="46.0" prefWidth="70.0">
                                  <children>
                                     <Label prefHeight="16.0" prefWidth="100.0" style="-fx-text-fill: white;" text="Mass">

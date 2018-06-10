@@ -66,6 +66,8 @@ public class StargazerController implements Initializable {
     @FXML
     private TextField planetName;
     @FXML
+    private CheckBox planetGoldilocks;
+    @FXML
     private TextField planetMass;
     @FXML
     private TextField planetRadius;
@@ -207,6 +209,7 @@ public class StargazerController implements Initializable {
                 planetMass.setText(doubleString(planet.getMass()));
                 planetRadius.setText(doubleString(planet.getRadius()));
                 planetDensity.setText(doubleString(planet.getDensity()));
+                planetGoldilocks.setSelected(planet.isGoldilocks());
 
                 orbitRadius.setText(doubleString(planet.getOrbitRadius()));
                 orbitPeriod.setText(doubleString(planet.getOrbitPeriod()));
