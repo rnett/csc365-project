@@ -34,6 +34,21 @@ public class StargazerController implements Initializable {
     private TableColumn goldilocksColumn;
 
     @FXML
+    private ComboBox typeSelect;
+    @FXML
+    private TextField minPlanets;
+    @FXML
+    private TextField maxPlanets;
+    @FXML
+    private TextField minGoldilocks;
+    @FXML
+    private TextField maxGoldilocks;
+    @FXML
+    private TextField minDistance;
+    @FXML
+    private TextField maxDistance;
+
+    @FXML
     private Label starName;
     @FXML
     private TextField starType;
@@ -89,6 +104,14 @@ public class StargazerController implements Initializable {
         planetColumn.setCellValueFactory(new PropertyValueFactory<SolarSystem, Integer>("planets"));
         goldilocksColumn.setCellValueFactory(new PropertyValueFactory<SolarSystem, Integer>("goldilocks"));
 
+        typeSelect.getItems().addAll(
+           "All",
+           "Unknown",
+           "Bright Giant",
+           "Giant",
+           "Subgiant",
+           "Main Sequence"
+        );
         importButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -228,5 +251,9 @@ public class StargazerController implements Initializable {
 
     private String doubleString(Double value) {
         return value != null ? Double.toString(value) : "N/A";
+    }
+
+    public void handleFilterChanged() {
+       // Call update which will read all the filters and run the query
     }
 }
