@@ -61,65 +61,70 @@ public class QueriesWithDBConnection {
 
         //building SQL statement to be executed
 
-            Statement statement = connect().createStatement();
+        Statement statement = connect().createStatement();
 
         String sqlStatement = "select * from stargazers.solarSystems";
 
-            if (attributes.isEmpty() || compareOps.isEmpty() ||
-                    ((attributes.size() != compareOps.size()) && (compareOps.size() != values.size())) ||
-                    chainOps.size() != attributes.size() - 1) {
+        if (attributes.isEmpty() || compareOps.isEmpty() ||
+                ((attributes.size() != compareOps.size()) && (compareOps.size() != values.size())) ||
+                chainOps.size() != attributes.size() - 1) {
+            return allSys;
+        }
+
+        if (attributes.size() > 0) {
+            sqlStatement += " where ";
+        }
+
+        for (int i = 0; i < attributes.size(); i++) {
+
+            if (compareOps.get(i) != "<=" && compareOps.get(i) != "=" && compareOps.get(i) != ">=") {
+                System.out.println("Unsupported comparison operator.");
                 return allSys;
             }
 
-            if(attributes.size() > 0) {
-                sqlStatement += " where ";
-            }
+            if ((values.get(i) instanceof Double || values.get(i) instanceof Integer)) {
 
-            for(int i = 0; i < attributes.size(); i++) {
-
-                if( compareOps.get(i) != "<=" && compareOps.get(i) != "=" &&  compareOps.get(i) != ">=" ) {
-                    System.out.println("Unsupported comparison operator.");
-                    return allSys;
-                }
-
-                if( (values.get(i) instanceof Double || values.get(i) instanceof Integer) ) {
-
-                    if(!chainOps.isEmpty()) {
-                        sqlStatement += attributes.get(i) + " " + compareOps.get(i) + " " + values.get(i) + " " + chainOps.remove(0) + " ";
-                    } else {
-                        sqlStatement += attributes.get(i) + " " + compareOps.get(i) + " " + values.get(i);
-                    }
-
-                } else if(values.get(i) instanceof String) {
-                    
-                    if(!chainOps.isEmpty()) {
-                        sqlStatement += attributes.get(i) + " " + compareOps.get(i) + " \'" + values.get(i) + "\' " + chainOps.remove(0) + " ";
-                    } else {
-                        sqlStatement += attributes.get(i) + " " + compareOps.get(i) + " \'" + values.get(i) + "\'";
-                    }
-                    
+                if (!chainOps.isEmpty()) {
+                    sqlStatement += attributes.get(i) + " " + compareOps.get(i) + " " + values.get(i) + " " + chainOps.remove(0) + " ";
                 } else {
-                    System.out.println("Value needs to be either a string, double or integer.");
-                    return allSys;
+                    sqlStatement += attributes.get(i) + " " + compareOps.get(i) + " " + values.get(i);
                 }
 
+            } else if (values.get(i) instanceof String) {
 
+                if (!chainOps.isEmpty()) {
+                    sqlStatement += attributes.get(i) + " " + compareOps.get(i) + " \'" + values.get(i) + "\' " + chainOps.remove(0) + " ";
+                } else {
+                    sqlStatement += attributes.get(i) + " " + compareOps.get(i) + " \'" + values.get(i) + "\'";
+                }
+
+            } else {
+                System.out.println("Value needs to be either a string, double or integer.");
+                return allSys;
             }
 
-            sqlStatement += " order by distance asc";
-            
-            rs = statement.executeQuery(sqlStatement); //ResultSet is an iterator
 
-            System.out.println("\nQuery executed: " + sqlStatement);
+        }
+
+        sqlStatement += " order by distance, starName asc";
+
+        rs = statement.executeQuery(sqlStatement); //ResultSet is an iterator
+
+        System.out.println("\nQuery executed: " + sqlStatement);
+
+        if (!rs.next())
+            return allSys;
+        else
+            rs.previous();
 
 
         while( !rs.isAfterLast() )
-                allSys.add(new SolarSystem(rs) );
+            allSys.add(new SolarSystem(rs));
 
-        
+
         return allSys;
     }
-    
+
     public static ArrayList<SolarSystem> getSystems(Star.Type type,
                                                     int planetsMin, int planetsMax,
                                                     int goldilocksMin, int goldilocksMax,
@@ -236,7 +241,7 @@ public class QueriesWithDBConnection {
 
                 if (connect == null)
                     doSshTunnel(sshUser, sshPW, sshHost, nSshPort, strRemoteHost, nLocalPort,
-                        nRemotePort);
+                            nRemotePort);
 
                 //Class.forName("com.mysql.jdbc.Driver"); //input driver class name
 

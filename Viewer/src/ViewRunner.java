@@ -23,11 +23,11 @@ public class ViewRunner extends Application {
 
         Scene scene = new Scene(root);
 
-
         defaultView.getController().setStage(stage);
 
         stage.setTitle("Star Gazer");
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
     }
 }

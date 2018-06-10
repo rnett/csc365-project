@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 
 public class StargazerController implements Initializable {
     @FXML
-    private ListView<String> planetList;
+    private ListView<Planet> planetList;
     @FXML
     private TableView<SolarSystem> starTable;
     @FXML
@@ -76,9 +76,6 @@ public class StargazerController implements Initializable {
     private FileChooser fileChooser = null;
     private Stage stage;
 
-    private Star star;
-    private Planet planet;
-
     private static final int starViewerWidth = 480;
 
     @Override
@@ -89,6 +86,27 @@ public class StargazerController implements Initializable {
         nameColumn.setCellValueFactory(new PropertyValueFactory<SolarSystem, String>("name"));
         planetColumn.setCellValueFactory(new PropertyValueFactory<SolarSystem, Integer>("planetCount"));
         goldilocksColumn.setCellValueFactory(new PropertyValueFactory<SolarSystem, Integer>("goldilocks"));
+
+        planetList.setCellFactory(param -> new ListCell<Planet>() {
+            @Override
+            protected void updateItem(Planet item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null)
+                    setText("");
+                else {
+                    setText(item.getLetter());
+
+                    if (item.isGoldilocks()) {
+                        setStyle("-fx-control-inner-background: derive(green, 80%);");
+                    } else {
+                        setStyle("-fx-control-inner-background: derive(-fx-base, 80%);");
+                    }
+                }
+
+
+            }
+        });
 
         importButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -130,7 +148,7 @@ public class StargazerController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends SolarSystem> observable, SolarSystem oldValue, SolarSystem newValue) {
                 starName.setText(newValue.getStar().getStarName());
-                star = newValue.getStar();
+                Star star = newValue.getStar();
 
                 starType.setText(star.getType().getName());
                 starColor.setText(star.getColor().getName());
@@ -139,7 +157,14 @@ public class StargazerController implements Initializable {
                 starTemp.setText(doubleString(star.getTemp()) + " K");
                 starDistance.setText(doubleString(star.getDistance()) + " LY");
 
-                planetList.setItems(FXCollections.observableArrayList(getPlanets(newValue)));
+                planetList.setItems(FXCollections.observableArrayList(newValue.getPlanets()));
+
+                for (int i = 0; i < newValue.getPlanetCount(); i++) {
+                    if (newValue.getPlanets().get(i).isGoldilocks()) {
+                        planetList.itemsProperty();
+                    }
+                }
+
                 planetList.getSelectionModel().select(0);
 
                 starViewer.getChildren().clear();
@@ -164,26 +189,19 @@ public class StargazerController implements Initializable {
         });
         starTable.getSelectionModel().select(0);
 
-        planetList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+        planetList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Planet>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            public void changed(ObservableValue<? extends Planet> observable, Planet oldValue, Planet newValue) {
                 if (newValue == null) {
                     return;
                 }
-                planetName.setText(star.getStarName() + " " + newValue);
+                planetName.setText(starTable.getSelectionModel().getSelectedItem().getStar().getStarName() + " " + newValue.getLetter());
+                planetMass.setText(doubleString(newValue.getMass()));
+                planetRadius.setText(doubleString(newValue.getRadius()));
+                planetDensity.setText(doubleString(newValue.getDensity()));
 
-                for (Planet pm : starTable.getSelectionModel().getSelectedItem().getPlanets()) {
-                    if (pm.getLetter().equals(newValue)) { //TODO make sure this works
-                        planet = pm;
-                        break;
-                    }
-                }
-                planetMass.setText(doubleString(planet.getMass()));
-                planetRadius.setText(doubleString(planet.getRadius()));
-                planetDensity.setText(doubleString(planet.getDensity()));
-
-                orbitRadius.setText(doubleString(planet.getOrbitRadius()));
-                orbitPeriod.setText(doubleString(planet.getOrbitPeriod()));
+                orbitRadius.setText(doubleString(newValue.getOrbitRadius()));
+                orbitPeriod.setText(doubleString(newValue.getOrbitPeriod()));
             }
         });
         planetList.getSelectionModel().select(1);
@@ -198,32 +216,21 @@ public class StargazerController implements Initializable {
     private ArrayList<SolarSystem> getSolarSystems() {
         try {
             ArrayList<SolarSystem> ss = QueriesWithDBConnection.getSystems(
-                    Star.Type.Supergiant,
-                    2, -1,
-                    1, -1,
+                    Star.Type.BadFormat,
+                    6, -1,
+                    -1, -1,
                     -1, -1);
             starsErrorMessage.setText("");
             return ss;
         } catch (Exception e) {
+            e.printStackTrace();
             starsErrorMessage.setFill(Color.RED);
             starsErrorMessage.setText("Error");
             return new ArrayList<SolarSystem>();
         }
     }
 
-    private ArrayList<String> getPlanets(SolarSystem solarSystem) {
-        ArrayList<String> planetNames = new ArrayList<String>();
-
-        if (solarSystem == null)
-            return planetNames;
-
-        for (Planet p : solarSystem.getPlanets())
-            planetNames.add(p.getLetter());
-
-        return planetNames;
-    }
-
     private String doubleString(Double value) {
-        return value != null ? Double.toString(value) : "N/A";
+        return (value != null || value < 0) ? Double.toString(value) : "N/A";
     }
 }

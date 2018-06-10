@@ -60,7 +60,7 @@ public class Planet {
     }
 
     public Ellipse getOrbitElipse(double factor, int index, double starX, double starY, double angle) {
-        Ellipse e = new Ellipse(starX + getLinearEcentricity(), starX, getOrbitRadius() * factor, getMinorOrbitRadius() * factor);
+        Ellipse e = new Ellipse(starX + getLinearEcentricity(), starX, 12 + getOrbitRadius() * factor, 12 + getMinorOrbitRadius() * factor);
 
         e.setStroke(getColor(index));
         e.setFill(Color.TRANSPARENT);

@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * The main class
@@ -67,6 +68,19 @@ public class SolarSystem {
 
         if (moreRows)
             rs.previous();
+
+        //TODO does not sort properly in the UI
+        planets.sort(new Comparator<Planet>() {
+            @Override
+            public int compare(Planet o1, Planet o2) {
+                if (o1.getOrbitRadius() > o2.getOrbitRadius())
+                    return 1;
+                else if (o1.getOrbitRadius() < o1.getOrbitRadius())
+                    return -1;
+                else
+                    return 0;
+            }
+        });
 
         this.name = new SimpleStringProperty(getStar().getStarName());
         this.planetCount = new SimpleIntegerProperty(getPlanets().size());
