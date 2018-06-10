@@ -11,12 +11,12 @@ public class Planet {
 
     private String starName;
     private String letter;
-    private double orbitRadius; //TODO AU
+    private double orbitRadius; //AU
     private double orbitPeriod; // days
     private double orbitEccentricity;
     private double orbitInclination;
-    private double mass; //TODO earth masses
-    private double radius; //TODO earth radii
+    private double mass; //earth masses
+    private double radius; //earth radii
     private double density; // g/cm3
     private boolean goldilocks;
 
@@ -33,8 +33,8 @@ public class Planet {
         orbitPeriod = rs.getDouble("orbitalPeriod");
         orbitEccentricity = rs.getDouble("orbitalEccentricity");
         orbitInclination = rs.getDouble("orbitalInclination");
-        mass = rs.getDouble("planetMass");
-        radius = rs.getDouble("planetRadius");
+        mass = rs.getDouble("planetMass") / 0.00315D;
+        radius = rs.getDouble("planetRadius") / 0.08921D;
         density = rs.getDouble("density");
         goldilocks = rs.getBoolean("goldilocks");
     }

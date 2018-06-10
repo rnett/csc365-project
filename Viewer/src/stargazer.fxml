@@ -4,6 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0"
@@ -171,7 +172,8 @@
                                           <Insets bottom="4.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <TextField fx:id="planetName" editable="false" prefHeight="26.0" prefWidth="87.0" style="-fx-background-color: #b2bebf;">
+                                    <TextField fx:id="planetName" editable="false" prefHeight="26.0" prefWidth="159.0"
+                                               style="-fx-background-color: #b2bebf;">
                                        <cursor>
                                           <Cursor fx:constant="DEFAULT" />
                                        </cursor>
@@ -259,6 +261,24 @@
                               </VBox>
                            </children>
                         </VBox>
+                        <TextField fx:id="starClass" editable="false" layoutX="231.0" layoutY="244.0" prefHeight="26.0"
+                                   prefWidth="126.0" style="-fx-background-color: #b2bebf;">
+                           <cursor>
+                              <Cursor fx:constant="DEFAULT"/>
+                           </cursor>
+                        </TextField>
+                        <Label layoutX="231.0" layoutY="227.0" prefHeight="16.0" prefWidth="100.0"
+                               style="-fx-text-fill: white;" text="Class"/>
+                        <Label layoutX="366.0" layoutY="129.0" text="S.M." textFill="WHITE"/>
+                        <Label layoutX="246.0" layoutY="196.0" text="K" textFill="WHITE"/>
+                        <Label layoutX="120.0" layoutY="196.0" text="S.R." textFill="WHITE"/>
+                        <Label layoutX="366.0" layoutY="196.0" text="LY" textFill="WHITE"/>
+                        <Label layoutX="370.0" layoutY="444.0" text="E.M." textFill="WHITE"/>
+                        <Label layoutX="368.0" layoutY="508.0" text="E.R." textFill="WHITE"/>
+                        <Label layoutX="355.0" layoutY="598.0" prefHeight="17.0" prefWidth="38.0" text="g/cm3"
+                               textFill="WHITE"/>
+                        <Label layoutX="368.0" layoutY="641.0" text="AU" textFill="WHITE"/>
+                        <Label layoutX="365.0" layoutY="708.0" text="Days" textFill="WHITE"/>
                      </children>
                   </AnchorPane>
                </children>
@@ -271,6 +291,9 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
+                  <Line endX="140.0" layoutX="391.0" layoutY="714.0" startX="-100.0" stroke="WHITE" strokeWidth="3.0"/>
+                  <Label fx:id="viewerAU" layoutX="367.0" layoutY="722.0" prefHeight="17.0" prefWidth="89.0" text="AU"
+                         textAlignment="CENTER" textFill="WHITE" textOverrun="CLIP"/>
                </children>
             </AnchorPane>
          </children>

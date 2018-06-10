@@ -64,6 +64,8 @@ public class StargazerController implements Initializable {
     private TextField starTemp;
     @FXML
     private TextField starDistance;
+    @FXML
+    private TextField starClass;
 
     @FXML
     private TextField planetName;
@@ -85,6 +87,8 @@ public class StargazerController implements Initializable {
 
     @FXML
     private AnchorPane starViewer;
+    @FXML
+    private Label viewerAU;
 
     @FXML
     private Text starsErrorMessage;
@@ -203,8 +207,11 @@ public class StargazerController implements Initializable {
                 starColor.setText(star.getColor().getName());
                 starMass.setText(doubleString(star.getMass()));
                 starRadius.setText(doubleString(star.getRadius()));
-                starTemp.setText(doubleString(star.getTemp()) + " K");
-                starDistance.setText(doubleString(star.getDistance()) + " LY");
+                starTemp.setText(doubleString(star.getTemp()));
+                starDistance.setText(doubleString(star.getDistance()));
+                starClass.setText(star.getStarClass());
+
+                viewerAU.setText((starViewerWidth / (2D * newValue.getOrbitDrawFactor(starViewerWidth))) + " AU");
 
                 planetList.getItems().clear();
                 planetList.setItems(FXCollections.observableArrayList(newValue.getPlanets()));
