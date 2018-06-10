@@ -224,22 +224,9 @@ public class StargazerController implements Initializable {
                 planetMass.setText(doubleString(newValue.getMass()));
                 planetRadius.setText(doubleString(newValue.getRadius()));
                 planetDensity.setText(doubleString(newValue.getDensity()));
-
-                for (Planet pm : solarSystem.getPlanets()) {
-                    if (pm.getLetter().equals(newValue)) { //TODO make sure this works
-                        planet = pm;
-                        break;
-                    }
-                }
-                planetMass.setText(doubleString(planet.getMass()));
-                planetRadius.setText(doubleString(planet.getRadius()));
-                planetDensity.setText(doubleString(planet.getDensity()));
-                planetGoldilocks.setSelected(planet.isGoldilocks());
-
-                orbitRadius.setText(doubleString(planet.getOrbitRadius()));
-                orbitPeriod.setText(doubleString(planet.getOrbitPeriod()));
                 orbitRadius.setText(doubleString(newValue.getOrbitRadius()));
                 orbitPeriod.setText(doubleString(newValue.getOrbitPeriod()));
+                planetGoldilocks.setSelected(newValue.isGoldilocks());
             }
         });
         planetList.getSelectionModel().select(1);
