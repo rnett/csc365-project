@@ -11,7 +11,12 @@ public class ViewRunner extends Application {
      * JavaFX support. Not needed for running from the command line.
      */
     public static void main(String[] args) {
-        QueriesWithDBConnection.connect(args[0], args[1], args[2]);
+
+        if (args.length >= 3) {
+            QueriesWithDBConnection.connect(args[0], args[1], args[2]);
+        } else {
+            QueriesWithDBConnection.connect();
+        }
         launch(args);
         QueriesWithDBConnection.close();
     }
