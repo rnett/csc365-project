@@ -34,6 +34,21 @@ public class StargazerController implements Initializable {
     private TableColumn goldilocksColumn;
 
     @FXML
+    private ComboBox typeSelect;
+    @FXML
+    private TextField minPlanets;
+    @FXML
+    private TextField maxPlanets;
+    @FXML
+    private TextField minGoldilocks;
+    @FXML
+    private TextField maxGoldilocks;
+    @FXML
+    private TextField minDistance;
+    @FXML
+    private TextField maxDistance;
+
+    @FXML
     private Label starName;
     @FXML
     private TextField starType;
@@ -50,6 +65,8 @@ public class StargazerController implements Initializable {
 
     @FXML
     private TextField planetName;
+    @FXML
+    private CheckBox planetGoldilocks;
     @FXML
     private TextField planetMass;
     @FXML
@@ -87,6 +104,14 @@ public class StargazerController implements Initializable {
         planetColumn.setCellValueFactory(new PropertyValueFactory<SolarSystem, Integer>("planetCount"));
         goldilocksColumn.setCellValueFactory(new PropertyValueFactory<SolarSystem, Integer>("goldilocks"));
 
+        typeSelect.getItems().addAll(
+           "All",
+           "Unknown",
+           "Bright Giant",
+           "Giant",
+           "Subgiant",
+           "Main Sequence"
+        );
         planetList.setCellFactory(param -> new ListCell<Planet>() {
             @Override
             protected void updateItem(Planet item, boolean empty) {
@@ -200,6 +225,19 @@ public class StargazerController implements Initializable {
                 planetRadius.setText(doubleString(newValue.getRadius()));
                 planetDensity.setText(doubleString(newValue.getDensity()));
 
+                for (Planet pm : solarSystem.getPlanets()) {
+                    if (pm.getLetter().equals(newValue)) { //TODO make sure this works
+                        planet = pm;
+                        break;
+                    }
+                }
+                planetMass.setText(doubleString(planet.getMass()));
+                planetRadius.setText(doubleString(planet.getRadius()));
+                planetDensity.setText(doubleString(planet.getDensity()));
+                planetGoldilocks.setSelected(planet.isGoldilocks());
+
+                orbitRadius.setText(doubleString(planet.getOrbitRadius()));
+                orbitPeriod.setText(doubleString(planet.getOrbitPeriod()));
                 orbitRadius.setText(doubleString(newValue.getOrbitRadius()));
                 orbitPeriod.setText(doubleString(newValue.getOrbitPeriod()));
             }
@@ -232,5 +270,9 @@ public class StargazerController implements Initializable {
 
     private String doubleString(Double value) {
         return (value != null || value < 0) ? Double.toString(value) : "N/A";
+    }
+
+    public void handleFilterChanged() {
+       // Call update which will read all the filters and run the query
     }
 }
