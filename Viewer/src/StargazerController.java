@@ -200,9 +200,13 @@ public class StargazerController implements Initializable {
         starTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<SolarSystem>() {
             @Override
             public void changed(ObservableValue<? extends SolarSystem> observable, SolarSystem oldValue, SolarSystem newValue) {
-                starName.setText(newValue.getStar().getStarName());
+
+                if (newValue == null)
+                    return;
+
                 Star star = newValue.getStar();
 
+                starName.setText(star.getStarName());
                 starType.setText(star.getType().getName());
                 starColor.setText(star.getColor().getName());
                 starMass.setText(doubleString(star.getMass()));
