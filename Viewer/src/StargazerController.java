@@ -15,6 +15,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -215,7 +216,7 @@ public class StargazerController implements Initializable {
                 starDistance.setText(doubleString(star.getDistance()));
                 starClass.setText(star.getStarClass());
 
-                viewerAU.setText((starViewerWidth / (2D * newValue.getOrbitDrawFactor(starViewerWidth))) + " AU");
+                viewerAU.setText(doubleString(starViewerWidth / (2D * newValue.getOrbitDrawFactor(starViewerWidth))) + " AU");
 
                 planetList.getItems().clear();
                 planetList.setItems(FXCollections.observableArrayList(newValue.getPlanets()));
@@ -308,11 +309,22 @@ public class StargazerController implements Initializable {
 
     private ArrayList<SolarSystem> getSolarSystems() {
         try {
+
+            double minDist = parseFilter(minDistance);
+
+            if (minDist != -1)
+                minDist /= 3.26D;
+
+            double maxDist = parseFilter(maxDistance);
+
+            if (maxDist != -1)
+                maxDist /= 3.26D;
+
             ArrayList<SolarSystem> ss = QueriesWithDBConnection.getSystems(
                     parseComboBox(typeSelect),
                     parseFilter(minPlanets), parseFilter(maxPlanets),
                     parseFilter(minGoldilocks), parseFilter(maxGoldilocks),
-                    (int) (parseFilter(minDistance) / 3.26D), (int) (parseFilter(maxDistance) / 3.26D));
+                    (int) minDist, (int) maxDist);
             starsErrorMessage.setText("");
 
             ss.sort(new Comparator<SolarSystem>() {
@@ -338,7 +350,7 @@ public class StargazerController implements Initializable {
     }
 
     private String doubleString(Double value) {
-        return (value != null && value >= 0) ? Double.toString(value) : "N/A";
+        return (value != null && value >= 0) ? BigDecimal.valueOf(value).setScale(3, BigDecimal.ROUND_HALF_EVEN).toString() : "N/A";
     }
 
     public void handleFilterChanged() {
