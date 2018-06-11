@@ -30,3 +30,15 @@ create table planets (
     primary key (starName, letter),
     foreign key (starName) references stars(starName)
 );
+
+drop view if exists solarSystems;
+create view solarSystems as 
+select * from 
+planets P join
+(
+select S1.starName, sum(P1.goldilocks) as golds from 
+planets P1 join stars S1 using(starName)
+group by P1.starName
+) G
+using(starName)
+join stars S using(starName);

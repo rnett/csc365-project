@@ -16,7 +16,6 @@
 # Package Files #
 *.war
 *.ear
-*.zip
 *.tar.gz
 *.rar
 
@@ -93,7 +92,6 @@ tomcat
 *.iso
 *.rar
 *.tar
-*.zip
 *.war
 *.ear
 *.sar
